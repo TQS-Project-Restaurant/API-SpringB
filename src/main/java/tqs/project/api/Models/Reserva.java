@@ -11,12 +11,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter
 @Getter
 @Entity
 @AllArgsConstructor
+@NoArgsConstructor
 public class Reserva {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
