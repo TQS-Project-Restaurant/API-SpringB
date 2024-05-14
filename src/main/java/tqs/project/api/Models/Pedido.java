@@ -1,5 +1,7 @@
 package tqs.project.api.Models;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,11 +29,11 @@ public class Pedido {
 
     @OneToMany
     @JoinColumn(name = "prato")
-    private Prato prato;
+    private List<Prato> prato;
 
     @OneToMany
     @JoinColumn(name = "bebida")
-    private Bebida bebida;
+    private List<Bebida> bebida;
 
     @Column(nullable = false)
     private int status;

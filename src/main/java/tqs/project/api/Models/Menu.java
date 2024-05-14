@@ -1,6 +1,7 @@
 package tqs.project.api.Models;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,7 +27,7 @@ public class Menu {
 
     @OneToMany
     @JoinColumn(name = "prato")
-    private Prato prato;
+    private List<Prato> prato;
 
     @Column(nullable = false)
     private LocalDate dia;

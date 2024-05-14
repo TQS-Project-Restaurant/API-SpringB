@@ -29,8 +29,8 @@ public class PedidoController {
         return new ResponseEntity<>(pedidos, HttpStatus.OK);
     }
 
-    @GetMapping("/ongoing")
-    public ResponseEntity<List<Pedido>> getAllOnGoingPedidos(){
+    @GetMapping("/preparing")
+    public ResponseEntity<List<Pedido>> getAllPreparingPedidos(){
         List<Pedido> pedidos = pedidoService.getPreparingPedidos();
         return new ResponseEntity<>(pedidos, HttpStatus.OK);
     }

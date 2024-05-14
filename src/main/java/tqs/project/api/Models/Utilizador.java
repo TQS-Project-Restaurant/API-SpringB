@@ -1,5 +1,7 @@
 package tqs.project.api.Models;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,7 +26,7 @@ public class Utilizador {
 
     @OneToMany
     @JoinColumn(name = "reserva")
-    private Reserva reserva;
+    private List<Reserva> reserva;
 
     @Column(nullable = false, unique = true)
     private String email;
