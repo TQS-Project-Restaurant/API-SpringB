@@ -29,7 +29,7 @@ public class Prato {
     private Double preco;
 
     @Column(nullable = true)
-    private Double hidratos_carbono;
+    private Double hidratosCarbono;
 
     @Column(nullable = true)
     private Double proteina;

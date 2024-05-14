@@ -29,7 +29,7 @@ public class Reserva {
     private Utilizador utilizador;
 
     @Column(nullable = false)
-    private int quantidade_mesas;
+    private int quantidadeMesas;
 
     @Column(nullable = false)
     private int status;
