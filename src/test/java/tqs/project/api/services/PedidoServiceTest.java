@@ -1,8 +1,9 @@
-package tqs.project.api.Services;
+package tqs.project.api.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,17 +14,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import tqs.project.api.Repositories.PedidoRepository;
-import tqs.project.api.Services.impl.PedidoServiceImpl;
-import tqs.project.api.Models.Pedido;
-import tqs.project.api.Others.STATUS;
+import tqs.project.api.repositories.PedidoRepository;
+import tqs.project.api.services.impl.PedidoServiceImpl;
+import tqs.project.api.models.Pedido;
+import tqs.project.api.others.STATUS;
 
 @ExtendWith(MockitoExtension.class)
 class PedidoServiceTest {
-    @Mock(lenient = true)
+    @Mock(strictness = Mock.Strictness.LENIENT )
     private PedidoRepository repository;
 
     @InjectMocks
@@ -42,8 +42,8 @@ class PedidoServiceTest {
         List<Pedido> allPending = Arrays.asList(pedido);
         List<Pedido> allPreparing = Arrays.asList(pedido2);
 
-        Mockito.when(repository.findAllByStatus(STATUS.PENDING.ordinal())).thenReturn(allPending);
-        Mockito.when(repository.findAllByStatus(STATUS.PREPARING.ordinal())).thenReturn(allPreparing);
+        when(repository.findAllByStatus(STATUS.PENDING.ordinal())).thenReturn(allPending);
+        when(repository.findAllByStatus(STATUS.PREPARING.ordinal())).thenReturn(allPreparing);
     }
 
     @Test

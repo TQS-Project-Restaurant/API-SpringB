@@ -1,4 +1,6 @@
-package tqs.project.api.Models;
+package tqs.project.api.models;
+
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -6,45 +8,33 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
 @Setter
+@Getter
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Prato {
+public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(nullable = false, unique = true)
-    private String nome;
+    @Column(nullable = false)
+    private int mesa;
+
+    @OneToMany
+    @JoinColumn(name = "prato")
+    private List<Prato> prato;
+
+    @OneToMany
+    @JoinColumn(name = "bebida")
+    private List<Bebida> bebida;
 
     @Column(nullable = false)
-    private Double preco;
-
-    @Column(nullable = true)
-    private Double hidratos_carbono;
-
-    @Column(nullable = true)
-    private Double proteina;
-
-    @Column(nullable = true)
-    private int kcal;
-
-    @Column(nullable = false)
-    private int stock;
-
-    @ManyToOne
-    @JoinColumn(name = "menu")
-    private Menu menu;
-
-    @ManyToOne
-    @JoinColumn(name = "pedido")
-    private Pedido pedido;
+    private int status;
 }

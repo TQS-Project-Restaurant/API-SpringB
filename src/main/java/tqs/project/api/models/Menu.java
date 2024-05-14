@@ -1,5 +1,6 @@
-package tqs.project.api.Models;
+package tqs.project.api.models;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -19,21 +20,15 @@ import lombok.Setter;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Utilizador {
+public class Menu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @OneToMany
-    @JoinColumn(name = "reserva")
-    private List<Reserva> reserva;
-
-    @Column(nullable = false, unique = true)
-    private String email;
+    @JoinColumn(name = "prato")
+    private List<Prato> prato;
 
     @Column(nullable = false)
-    private String password;
-
-    @Column(nullable = false)
-    private int role;
+    private LocalDate dia;
 }

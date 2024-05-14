@@ -1,4 +1,4 @@
-package tqs.project.api.Controllers;
+package tqs.project.api.controllers;
 
 import java.util.List;
 
@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import tqs.project.api.Models.Pedido;
-import tqs.project.api.Services.PedidoService;
+import tqs.project.api.models.Pedido;
+import tqs.project.api.services.PedidoService;
 
 @RestController
-@RequestMapping("/api/pedidos")
+@RequestMapping("/api/requests")
 @CrossOrigin(origins = "http://localhost:3000")
 public class PedidoController {
 

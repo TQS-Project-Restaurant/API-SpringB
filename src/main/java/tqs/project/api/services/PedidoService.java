@@ -1,8 +1,8 @@
-package tqs.project.api.Services;
+package tqs.project.api.services;
 
 import java.util.List;
 
-import tqs.project.api.Models.Pedido;
+import tqs.project.api.models.Pedido;
 
 public interface PedidoService {
     public List<Pedido> getPendingPedidos();

@@ -1,4 +1,4 @@
-package tqs.project.api.Others;
+package tqs.project.api.others;
 
 public enum STATUS {
     PENDING(0),

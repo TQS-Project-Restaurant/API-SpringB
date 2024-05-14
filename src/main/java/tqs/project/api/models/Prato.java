@@ -1,6 +1,4 @@
-package tqs.project.api.Models;
-
-import java.time.LocalDate;
+package tqs.project.api.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,26 +12,39 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
 @Getter
+@Setter
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Reserva {
+public class Prato {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(nullable = false, unique = true)
+    private String nome;
+
+    @Column(nullable = false)
+    private Double preco;
+
+    @Column(nullable = true)
+    private Double hidratos_carbono;
+
+    @Column(nullable = true)
+    private Double proteina;
+
+    @Column(nullable = true)
+    private int kcal;
+
+    @Column(nullable = false)
+    private int stock;
+
     @ManyToOne
-    @JoinColumn(name = "utilizador")
-    private Utilizador utilizador;
+    @JoinColumn(name = "menu")
+    private Menu menu;
 
-    @Column(nullable = false)
-    private int quantidade_mesas;
-
-    @Column(nullable = false)
-    private int status;
-
-    @Column(nullable = false)
-    private LocalDate dia;
+    @ManyToOne
+    @JoinColumn(name = "pedido")
+    private Pedido pedido;
 }

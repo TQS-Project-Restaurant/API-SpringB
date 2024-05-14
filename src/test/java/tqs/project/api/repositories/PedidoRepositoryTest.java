@@ -1,4 +1,4 @@
-package tqs.project.api.Repositories;
+package tqs.project.api.repositories;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
-import tqs.project.api.Models.Pedido;
-import tqs.project.api.Others.STATUS;
+import tqs.project.api.models.Pedido;
+import tqs.project.api.others.STATUS;
 
 @DataJpaTest
 class PedidoRepositoryTest {

@@ -1,4 +1,4 @@
-package tqs.project.api.Controllers;
+package tqs.project.api.controllers;
 
 import org.junit.jupiter.api.Test;
 
@@ -20,9 +20,9 @@ import java.util.List;
 
 import org.apache.http.HttpStatus;
 
-import tqs.project.api.Services.PedidoService;
-import tqs.project.api.Models.Pedido;
-import tqs.project.api.Others.STATUS;
+import tqs.project.api.services.PedidoService;
+import tqs.project.api.models.Pedido;
+import tqs.project.api.others.STATUS;
 
 @WebMvcTest(PedidoController.class)
 class PedidoControllerTest {
@@ -52,7 +52,7 @@ class PedidoControllerTest {
                 .mockMvc(mvc)
                 .contentType(ContentType.JSON)
             .when()
-                .get("/api/pedidos/pending")
+                .get("/api/requests/pending")
             .then()
                 .statusCode(HttpStatus.SC_OK)
                 .assertThat()
@@ -76,7 +76,7 @@ class PedidoControllerTest {
                 .mockMvc(mvc)
                 .contentType(ContentType.JSON)
             .when()
-                .get("/api/pedidos/preparing")
+                .get("/api/requests/preparing")
             .then()
                 .statusCode(HttpStatus.SC_OK)
                 .assertThat()
