@@ -1,4 +1,4 @@
-package tqs.project.api.ControllersTest;
+package tqs.project.api.Controllers;
 
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +9,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import tqs.project.api.Controllers.PedidoController;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.times;
