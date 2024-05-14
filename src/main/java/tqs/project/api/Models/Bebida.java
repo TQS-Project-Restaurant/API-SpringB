@@ -26,13 +26,13 @@ public class Bebida {
     @Column(nullable = false)
     private Double preco;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Double hidratos_carbono;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Double proteina;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private int kcal;
 
     @Column(nullable = false)
