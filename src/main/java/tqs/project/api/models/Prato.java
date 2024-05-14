@@ -1,4 +1,4 @@
-package tqs.project.api.Models;
+package tqs.project.api.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,12 +9,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
 @AllArgsConstructor
+@NoArgsConstructor
 public class Prato {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +29,7 @@ public class Prato {
     private Double preco;
 
     @Column(nullable = true)
-    private Double hidratos_carbono;
+    private Double hidratosCarbono;
 
     @Column(nullable = true)
     private Double proteina;

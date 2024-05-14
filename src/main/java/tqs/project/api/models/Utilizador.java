@@ -1,4 +1,6 @@
-package tqs.project.api.Models;
+package tqs.project.api.models;
+
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,28 +11,29 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
 @Getter
+@Setter
 @Entity
 @AllArgsConstructor
-public class Pedido {
+@NoArgsConstructor
+public class Utilizador {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(nullable = false)
-    private int mesa;
-
     @OneToMany
-    @JoinColumn(name = "prato")
-    private Prato prato;
+    @JoinColumn(name = "reserva")
+    private List<Reserva> reserva;
 
-    @OneToMany
-    @JoinColumn(name = "bebida")
-    private Bebida bebida;
+    @Column(nullable = false, unique = true)
+    private String email;
 
     @Column(nullable = false)
-    private int status;
+    private String password;
+
+    @Column(nullable = false)
+    private int role;
 }
