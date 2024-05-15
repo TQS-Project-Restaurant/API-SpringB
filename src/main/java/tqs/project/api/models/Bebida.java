@@ -44,6 +44,6 @@ public class Bebida {
     @JoinColumn(name = "pedido")
     private Pedido pedido;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String imagemUrl;
 }
