@@ -44,8 +44,8 @@ public class PedidoServiceImpl implements PedidoService {
             return null;
         }
 
-        pedidoToUpdate.setBebida(pedido.getBebida());
-        pedidoToUpdate.setPrato(pedido.getPrato());
+        pedidoToUpdate.setBebidas(pedido.getBebidas());
+        pedidoToUpdate.setPratos(pedido.getPratos());
         pedidoToUpdate.setMesa(pedido.getMesa());
         pedidoToUpdate.setStatus(pedido.getStatus());
 
