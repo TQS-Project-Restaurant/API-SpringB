@@ -1,5 +1,6 @@
 package tqs.project.api.controllers;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,17 +34,26 @@ class PedidoControllerTest {
     @MockBean
     private PedidoService service;
 
-    @Test
-    void givenManyPendingPedidos_whenGetPendingPedidos_thenReturnJsonArray(){
-        Pedido pedido1 = new Pedido();
-        pedido1.setMesa(0);
-        pedido1.setStatus(STATUS.PENDING.ordinal());
+    Pedido pedido = new Pedido();
+    Pedido pedido2 = new Pedido();
+    Pedido pedido3 = new Pedido();
 
-        Pedido pedido2 = new Pedido();
+    @BeforeEach
+    void setUp(){
+        pedido.setMesa(0);
+        pedido.setStatus(STATUS.PENDING.ordinal());
+
         pedido2.setMesa(1);
         pedido2.setStatus(STATUS.PENDING.ordinal());
 
-        List<Pedido> pedidos = Arrays.asList(pedido1, pedido2);
+        pedido3.setMesa(2);
+        pedido3.setStatus(STATUS.PREPARING.ordinal());
+    }
+
+
+    @Test
+    void givenManyPendingPedidos_whenGetPendingPedidos_thenReturnJsonArray(){
+        List<Pedido> pedidos = Arrays.asList(pedido, pedido2);
 
         when(service.getPendingPedidos()).thenReturn(pedidos);
 
@@ -62,12 +72,8 @@ class PedidoControllerTest {
     }
 
     @Test
-    void getAllPreparingPedidos(){
-        Pedido pedido1 = new Pedido();
-        pedido1.setMesa(0);
-        pedido1.setStatus(STATUS.PREPARING.ordinal());
-
-        List<Pedido> pedidos = Arrays.asList(pedido1);
+    void givenManyPreparingPedidos_whenGetPreparingPedidos_thenReturnJsonArray(){
+        List<Pedido> pedidos = Arrays.asList(pedido3);
 
         when(service.getPreparingPedidos()).thenReturn(pedidos);
 
@@ -83,5 +89,25 @@ class PedidoControllerTest {
                 .body("size()", is(1));
 
         verify(service, times(1)).getPreparingPedidos();
+    }
+
+    @Test
+    void givenManyPedidos_whenGetPedidos_thenReturnJsonArray(){
+        List<Pedido> pedidos = Arrays.asList(pedido, pedido2, pedido3);
+
+        when(service.getPedidos()).thenReturn(pedidos);
+
+        RestAssuredMockMvc
+            .given()
+                .mockMvc(mvc)
+                .contentType(ContentType.JSON)
+            .when()
+                .get("/api/requests")
+            .then()
+                .statusCode(HttpStatus.SC_OK)
+                .assertThat()
+                .body("size()", is(3));
+
+        verify(service, times(1)).getPedidos();        
     }
 }

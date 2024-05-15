@@ -31,4 +31,9 @@ public class PedidoServiceImpl implements PedidoService {
         return pedidoRepository.findAllByStatus(STATUS.PREPARING.ordinal());
     }
 
+    @Override
+    public List<Pedido> getPedidos() {
+        return pedidoRepository.findAll();
+    }
+
 }

@@ -47,4 +47,7 @@ public class Prato {
     @ManyToOne
     @JoinColumn(name = "pedido")
     private Pedido pedido;
+
+    @Column(nullable = true)
+    private String imagemUrl;
 }
