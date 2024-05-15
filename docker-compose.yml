@@ -14,7 +14,7 @@ services:
     working_dir: /app
     command: sh run.sh
     ports:
-      - 8000:8000
+      - 8080:8080
       - 35729:35729
       - 5005:5005
 

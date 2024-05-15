@@ -7,8 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,13 +26,11 @@ public class Pedido {
     @Column(nullable = false)
     private int mesa;
 
-    @OneToMany
-    @JoinColumn(name = "prato")
-    private List<Prato> prato;
+    @ManyToMany
+    private List<Prato> pratos;
 
-    @OneToMany
-    @JoinColumn(name = "bebida")
-    private List<Bebida> bebida;
+    @ManyToMany
+    private List<Bebida> bebidas;
 
     @Column(nullable = false)
     private int status;
