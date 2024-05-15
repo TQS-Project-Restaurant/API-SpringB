@@ -41,25 +41,35 @@ class PedidoServiceTest {
 
         List<Pedido> allPending = Arrays.asList(pedido);
         List<Pedido> allPreparing = Arrays.asList(pedido2);
+        List<Pedido> allPedidos = Arrays.asList(pedido, pedido2);
 
         when(repository.findAllByStatus(STATUS.PENDING.ordinal())).thenReturn(allPending);
         when(repository.findAllByStatus(STATUS.PREPARING.ordinal())).thenReturn(allPreparing);
+        when(repository.findAll()).thenReturn(allPedidos);
     }
 
     @Test
     void whenGetPendingPedidos_returnPendingPedidos(){
-        List<Pedido> pendingPedidos = service.getPendingPedidos();
+        List<Pedido> pedidos = service.getPendingPedidos();
 
-        assertThat(pendingPedidos).hasSize(1);
+        assertThat(pedidos).hasSize(1);
         verify(repository, times(1)).findAllByStatus(STATUS.PENDING.ordinal());
     }
 
     @Test
     void whenGetPreparingPedidos_returnPreparingPedidos(){
-        List<Pedido> preparingPedidos = service.getPreparingPedidos();
+        List<Pedido> pedidos = service.getPreparingPedidos();
 
-        assertThat(preparingPedidos).hasSize(1);
+        assertThat(pedidos).hasSize(1);
         verify(repository, times(1)).findAllByStatus(STATUS.PREPARING.ordinal());
+    }
+
+    @Test
+    void whenGetAllPedidos_returnAllPedidos(){
+        List<Pedido> pedidos = service.getPedidos();
+
+        assertThat(pedidos).hasSize(2);
+        verify(repository, times(1)).findAll();
     }
 
 }
