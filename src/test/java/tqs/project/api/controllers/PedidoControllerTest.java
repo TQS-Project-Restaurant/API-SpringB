@@ -149,5 +149,35 @@ class PedidoControllerTest {
             .put("/api/requests/1")
         .then()
             .statusCode(HttpStatus.SC_BAD_REQUEST);
+
+
+        newPedido.setStatus(-1);
+
+        RestAssuredMockMvc
+            .given()
+                .mockMvc(mvc)
+                .contentType(ContentType.JSON)
+                .body(newPedido)
+            .when()
+                .put("/api/requests/1")
+            .then()
+                .statusCode(HttpStatus.SC_BAD_REQUEST);
+    }
+
+    @Test
+    void givenPedidoWithWrongID_whenUpdatePedido_thenReturn404(){
+        Pedido newPedido = new Pedido();
+        newPedido.setMesa(pedido.getMesa());
+        newPedido.setStatus(STATUS.COMPLETED.ordinal());
+
+        RestAssuredMockMvc
+        .given()
+            .mockMvc(mvc)
+            .contentType(ContentType.JSON)
+            .body(newPedido)
+        .when()
+            .put("/api/requests/1")
+        .then()
+            .statusCode(HttpStatus.SC_NOT_FOUND);
     }
 }
