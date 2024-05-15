@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import tqs.project.api.repositories.PedidoRepository;
@@ -32,6 +34,7 @@ class PedidoServiceTest {
     @BeforeEach
     void setUp(){
         Pedido pedido = new Pedido();
+        pedido.setId(1L);
         pedido.setMesa(1);
         pedido.setStatus(STATUS.PENDING.ordinal());
 
@@ -46,6 +49,7 @@ class PedidoServiceTest {
         when(repository.findAllByStatus(STATUS.PENDING.ordinal())).thenReturn(allPending);
         when(repository.findAllByStatus(STATUS.PREPARING.ordinal())).thenReturn(allPreparing);
         when(repository.findAll()).thenReturn(allPedidos);
+        when(repository.findById(1L)).thenReturn(Optional.of(pedido));
     }
 
     @Test
@@ -72,4 +76,28 @@ class PedidoServiceTest {
         verify(repository, times(1)).findAll();
     }
 
+    @Test
+    void whenUpdatePedido_thenReturnPedidoUpdated(){
+        Pedido pedidoCompleted = new Pedido();
+        pedidoCompleted.setMesa(1);
+        pedidoCompleted.setStatus(STATUS.COMPLETED.ordinal());
+
+        when(repository.save(Mockito.any())).thenReturn(pedidoCompleted);
+        Pedido pedidoUpdated = service.updatePedido(1L, pedidoCompleted);
+
+        assertThat(pedidoUpdated.getStatus()).isEqualTo(STATUS.COMPLETED.ordinal());
+        verify(repository, times(1)).findById(1L);
+    }
+
+    @Test
+    void whenUpdateNonExistentPedido_thenReturnNull(){
+        Pedido pedidoCompleted = new Pedido();
+        pedidoCompleted.setMesa(1);
+        pedidoCompleted.setStatus(STATUS.COMPLETED.ordinal());
+
+        Pedido pedidoUpdated = service.updatePedido(2L, pedidoCompleted);
+
+        assertThat(pedidoUpdated).isEqualTo(null);
+        verify(repository, times(1)).findById(2L);
+    }
 }
