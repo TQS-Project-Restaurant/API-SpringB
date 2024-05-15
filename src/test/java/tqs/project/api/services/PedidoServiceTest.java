@@ -97,7 +97,7 @@ class PedidoServiceTest {
 
         Pedido pedidoUpdated = service.updatePedido(2L, pedidoCompleted);
 
-        assertThat(pedidoUpdated).isEqualTo(null);
+        assertThat(pedidoUpdated).isNull();
         verify(repository, times(1)).findById(2L);
     }
 }
