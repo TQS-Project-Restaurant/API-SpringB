@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import tqs.project.api.models.Reserva;
 
 @Repository
-public interface ReservaRepository extends JpaRepository<Reserva, Double>{
+public interface ReservaRepository extends JpaRepository<Reserva, Long>{
     
 }

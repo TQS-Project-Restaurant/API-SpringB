@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import tqs.project.api.models.Prato;
 
 @Repository
-public interface PratoRepository extends JpaRepository<Prato, Double> {
+public interface PratoRepository extends JpaRepository<Prato, Long> {
     
 }

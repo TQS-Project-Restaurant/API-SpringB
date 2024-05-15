@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import tqs.project.api.models.Utilizador;
 
 @Repository
-public interface UtilizadorRepository extends JpaRepository<Utilizador, Double> {
+public interface UtilizadorRepository extends JpaRepository<Utilizador, Long> {
     
 }
