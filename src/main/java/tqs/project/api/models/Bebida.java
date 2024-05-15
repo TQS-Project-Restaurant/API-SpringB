@@ -43,4 +43,7 @@ public class Bebida {
     @ManyToOne
     @JoinColumn(name = "pedido")
     private Pedido pedido;
+
+    @Column(nullable = false)
+    private String imagemUrl;
 }
