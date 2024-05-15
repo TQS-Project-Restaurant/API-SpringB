@@ -8,4 +8,6 @@ public interface PedidoService {
     public List<Pedido> getPendingPedidos();
 
     public List<Pedido> getPreparingPedidos();
+
+    public List<Pedido> getPedidos();
 }

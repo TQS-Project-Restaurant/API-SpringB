@@ -23,6 +23,12 @@ public class PedidoController {
         this.pedidoService = pedidoService;
     }
 
+    @GetMapping
+    public ResponseEntity<List<Pedido>> getAllPedidos(){
+        List<Pedido> pedidos = pedidoService.getPedidos();
+        return new ResponseEntity<>(pedidos, HttpStatus.OK);
+    }
+
     @GetMapping("/pending")
     public ResponseEntity<List<Pedido>> getAllPendingPedidos(){
         List<Pedido> pedidos = pedidoService.getPendingPedidos();
