@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import tqs.project.api.models.Bebida;
 
 @Repository
-public interface BebidaRepository extends JpaRepository<Bebida, Double> {
+public interface BebidaRepository extends JpaRepository<Bebida, Long> {
     
 }

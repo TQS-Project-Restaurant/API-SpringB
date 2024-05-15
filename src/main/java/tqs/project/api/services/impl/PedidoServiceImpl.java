@@ -36,4 +36,20 @@ public class PedidoServiceImpl implements PedidoService {
         return pedidoRepository.findAll();
     }
 
+    @Override
+    public Pedido updatePedido(Long id, Pedido pedido) {
+        Pedido pedidoToUpdate = pedidoRepository.findById(id).orElse(null);
+
+        if(pedidoToUpdate == null){
+            return null;
+        }
+
+        pedidoToUpdate.setBebida(pedido.getBebida());
+        pedidoToUpdate.setPrato(pedido.getPrato());
+        pedidoToUpdate.setMesa(pedido.getMesa());
+        pedidoToUpdate.setStatus(pedido.getStatus());
+
+        return pedidoRepository.save(pedidoToUpdate);
+    }
+
 }

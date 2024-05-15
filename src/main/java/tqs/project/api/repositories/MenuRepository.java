@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import tqs.project.api.models.Menu;
 
 @Repository
-public interface MenuRepository extends JpaRepository<Menu, Double> {
+public interface MenuRepository extends JpaRepository<Menu, Long> {
     
 }

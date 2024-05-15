@@ -2,7 +2,7 @@ package tqs.project.api.controllers;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -109,5 +109,75 @@ class PedidoControllerTest {
                 .body("size()", is(3));
 
         verify(service, times(1)).getPedidos();        
+    }
+
+    @Test
+    void givenPedido_whenUpdatePedido_thenReturnPedido(){
+        Pedido newPedido = new Pedido();
+        newPedido.setMesa(pedido.getMesa());
+        newPedido.setStatus(STATUS.PREPARING.ordinal());
+
+        when(service.updatePedido(Mockito.any(), Mockito.any())).thenReturn(newPedido);
+
+        RestAssuredMockMvc
+        .given()
+            .mockMvc(mvc)
+            .contentType(ContentType.JSON)
+            .body(pedido)
+        .when()
+            .put("/api/requests/1")
+        .then()
+            .statusCode(HttpStatus.SC_OK)
+            .assertThat()
+            .body("status", is(STATUS.PREPARING.ordinal()));
+
+        verify(service, times(1)).updatePedido(Mockito.any(), Mockito.any());  
+    }
+
+    @Test
+    void givenPedidoWithWrongStatus_whenUpdatePedido_thenReturn400(){
+        Pedido newPedido = new Pedido();
+        newPedido.setMesa(pedido.getMesa());
+        newPedido.setStatus(10);
+
+        RestAssuredMockMvc
+        .given()
+            .mockMvc(mvc)
+            .contentType(ContentType.JSON)
+            .body(newPedido)
+        .when()
+            .put("/api/requests/1")
+        .then()
+            .statusCode(HttpStatus.SC_BAD_REQUEST);
+
+
+        newPedido.setStatus(-1);
+
+        RestAssuredMockMvc
+            .given()
+                .mockMvc(mvc)
+                .contentType(ContentType.JSON)
+                .body(newPedido)
+            .when()
+                .put("/api/requests/1")
+            .then()
+                .statusCode(HttpStatus.SC_BAD_REQUEST);
+    }
+
+    @Test
+    void givenPedidoWithWrongID_whenUpdatePedido_thenReturn404(){
+        Pedido newPedido = new Pedido();
+        newPedido.setMesa(pedido.getMesa());
+        newPedido.setStatus(STATUS.COMPLETED.ordinal());
+
+        RestAssuredMockMvc
+        .given()
+            .mockMvc(mvc)
+            .contentType(ContentType.JSON)
+            .body(newPedido)
+        .when()
+            .put("/api/requests/1")
+        .then()
+            .statusCode(HttpStatus.SC_NOT_FOUND);
     }
 }

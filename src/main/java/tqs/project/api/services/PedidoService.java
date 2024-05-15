@@ -10,4 +10,6 @@ public interface PedidoService {
     public List<Pedido> getPreparingPedidos();
 
     public List<Pedido> getPedidos();
+
+    public Pedido updatePedido(Long id, Pedido pedido);
 }
