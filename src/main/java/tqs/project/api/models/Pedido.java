@@ -34,4 +34,7 @@ public class Pedido {
 
     @Column(nullable = false)
     private int status;
+
+    @Column(nullable = false)
+    private Long lastModified;
 }
