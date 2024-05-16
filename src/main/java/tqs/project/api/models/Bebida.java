@@ -41,10 +41,10 @@ public class Bebida {
     @Column(nullable = false)
     private int stock;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "bebidas")
     private List<Menu> menus;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "bebidas")
     private List<Pedido> pedidos;
 
     @Column(nullable = true)
