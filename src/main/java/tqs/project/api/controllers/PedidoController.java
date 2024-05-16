@@ -48,7 +48,7 @@ public class PedidoController {
     @PutMapping("/{id}")
     public ResponseEntity<Pedido> updatePedido(@PathVariable Long id, @RequestBody Pedido pedido){
         int status = pedido.getStatus();
-        if (status > STATUS.CANCELED.ordinal() || status < STATUS.PENDING.ordinal()){
+        if (status > STATUS.CANCELLED.ordinal() || status < STATUS.PENDING.ordinal()){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         

@@ -2,6 +2,8 @@ package tqs.project.api.models;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -41,10 +43,12 @@ public class Bebida {
     @Column(nullable = false)
     private int stock;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "bebidas")
+    @JsonIgnore
     private List<Menu> menus;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "bebidas")
+    @JsonIgnore
     private List<Pedido> pedidos;
 
     @Column(nullable = true)

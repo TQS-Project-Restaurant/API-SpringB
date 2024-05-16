@@ -38,7 +38,7 @@ class PedidoRepositoryTest {
         pedido3.setStatus(STATUS.COMPLETED.ordinal());
 
         pedido4.setMesa(3);
-        pedido4.setStatus(STATUS.CANCELED.ordinal());
+        pedido4.setStatus(STATUS.CANCELLED.ordinal());
 
         entityManager.persist(pedido);
         entityManager.persist(pedido2);
@@ -70,7 +70,7 @@ class PedidoRepositoryTest {
 
     @Test
     void givenSetOfCanceledPedidos_whenFindCanceled_thenReturnAllCanceled() {
-        List<Pedido> pedidos = repository.findAllByStatus(STATUS.CANCELED.ordinal());
+        List<Pedido> pedidos = repository.findAllByStatus(STATUS.CANCELLED.ordinal());
         
         assertThat(pedidos).hasSize(1);
     }
