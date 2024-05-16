@@ -2,7 +2,6 @@ package tqs.project.api.initializer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -25,7 +24,7 @@ public class DataInitializer implements CommandLineRunner {
     PratoRepository pratoRepository;
     PedidoRepository pedidoRepository;
 
-    int TOTAL_PEDIDOS = 7;
+    int TOTAL_PEDIDOS = 10;
 
     Bebida[] BEBIDAS = new Bebida[TOTAL_PEDIDOS];
     Prato[] PRATOS = new Prato[TOTAL_PEDIDOS];
@@ -58,19 +57,19 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void loadPedidos(){
-        int[] mesas = {1, 2, 3, 4, 5, 6, 7};
+        int[] mesas = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
+        // creating RANDOM pedidos
         for(int i = 0; i < TOTAL_PEDIDOS; i++) {
             PEDIDOS[i] = new Pedido();
 
             PEDIDOS[i].setMesa(mesas[i]);
-            PEDIDOS[i].setStatus(getRandomInt(STATUS.PENDING.ordinal(), STATUS.CANCELED.ordinal()));
+            PEDIDOS[i].setStatus(getRandomInt(STATUS.PENDING.ordinal(), STATUS.CANCELLED.ordinal()));
             
             List<Bebida> bebidasList = new ArrayList<>();
             List<Prato> pratosList = new ArrayList<>();
 
-            int v = getRandomInt(1, TOTAL_PEDIDOS);
-            for(int j = 0; j < v; j++){
+            for(int j = 0; j < getRandomInt(1, TOTAL_PEDIDOS); j++){
                 bebidasList.add(BEBIDAS[j]);
                 pratosList.add(PRATOS[j]);
             }
@@ -80,6 +79,43 @@ public class DataInitializer implements CommandLineRunner {
             
             pedidoRepository.save(PEDIDOS[i]);
         }
+
+        // creating at least ONE pedido with each status and STATIC information
+        Pedido pedidoPending = new Pedido();
+
+        pedidoPending.setMesa(11);
+        pedidoPending.setStatus(STATUS.PENDING.ordinal());
+        pedidoPending.setBebidas(List.of(BEBIDAS[0], BEBIDAS[8]));
+        pedidoPending.setPratos(List.of(PRATOS[4], PRATOS[2]));
+
+        pedidoRepository.save(pedidoPending);
+
+        Pedido pedidoPreparing = new Pedido();
+
+        pedidoPreparing.setMesa(12);
+        pedidoPreparing.setStatus(STATUS.PREPARING.ordinal());
+        pedidoPreparing.setBebidas(List.of(BEBIDAS[2], BEBIDAS[4], BEBIDAS[9]));
+        pedidoPreparing.setPratos(List.of(PRATOS[4], PRATOS[2], PRATOS[3], PRATOS[4], PRATOS[2]));
+
+        pedidoRepository.save(pedidoPreparing);
+
+        Pedido pedidoCompleted = new Pedido();
+
+        pedidoCompleted.setMesa(13);
+        pedidoCompleted.setStatus(STATUS.COMPLETED.ordinal());
+        pedidoCompleted.setBebidas(List.of(BEBIDAS[3]));
+        pedidoCompleted.setPratos(List.of(PRATOS[6]));
+
+        pedidoRepository.save(pedidoCompleted);
+
+        Pedido pedidoCancelled = new Pedido();
+
+        pedidoCancelled.setMesa(14);
+        pedidoCancelled.setStatus(STATUS.CANCELLED.ordinal());
+        pedidoCancelled.setBebidas(List.of(BEBIDAS[0], BEBIDAS[8], BEBIDAS[8], BEBIDAS[8], BEBIDAS[8]));
+        pedidoCancelled.setPratos(List.of(PRATOS[7], PRATOS[1]));
+
+        pedidoRepository.save(pedidoCancelled);
     }
 
     private void loadBebidas(){
@@ -92,8 +128,10 @@ public class DataInitializer implements CommandLineRunner {
         int kcalMin = 30;
         int kcalMax = 300;
 
-        String[] names = {"Coca-Cola", "Sumo de Laranja", "Lipton", "Limonada", "SuperBock", "Vinho da terra", "7Up"};
-        String[] imagesUrl = {"cocacola.png", "sumolaranja.png", "lipton.png", "limonada.png", "superbock.png", "vinhodaterra.png", "7up.png"};
+        String[] names = {"Coca-Cola", "Sumo de Laranja", "Lipton", "Limonada", "SuperBock", "Vinho da terra", "7Up", "Água", 
+                            "Sangria", "Whiskey"};
+        String[] imagesUrl = {"cocacola.png", "sumolaranja.png", "lipton.png", "limonada.png", "superbock.png", "vinhodaterra.png", 
+                            "7up.png", "agua.png", "sangria.png", "whiskey.png"};
 
         for(int i = 0; i < TOTAL_PEDIDOS; i++){
             BEBIDAS[i] = new Bebida();
@@ -120,8 +158,10 @@ public class DataInitializer implements CommandLineRunner {
         int kcalMin = 200;
         int kcalMax = 1350;
 
-        String[] names = {"Francesinha", "Sopa Tomate", "Prego no prato", "Salmão", "Lulas grelhadas", "Salada russa", "Rojões"};
-        String[] imagesUrl = {"francesinha.png", "sopatomate.png", "pregonoprato.png", "salmao.png", "lulasgrelhadas.png", "saladarussa.png", "rojoes.png"};
+        String[] names = {"Francesinha", "Sopa Tomate", "Prego no prato", "Salmão", "Lulas grelhadas", "Salada russa", "Rojões",
+                            "Sardinha assada", "Omelete", "Bacalhau com natas"};
+        String[] imagesUrl = {"francesinha.png", "sopatomate.png", "pregonoprato.png", "salmao.png", "lulasgrelhadas.png", "saladarussa.png", 
+                            "rojoes.png", "sardinhaassada.png", "omelete.png", "bacalhaucomnatas.png"};
 
         for(int i = 0; i < TOTAL_PEDIDOS; i++){
             PRATOS[i] = new Prato();
