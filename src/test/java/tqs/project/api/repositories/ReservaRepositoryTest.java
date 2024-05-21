@@ -37,7 +37,6 @@ class ReservaRepositoryTest {
         utilizador.setPassword("123123123");
         utilizador.setRole(ROLES.USER.ordinal());
 
-        Reserva reserva = new Reserva();
         reserva.setUtilizador(utilizador);
         reserva.setQuantidadeMesas(2);
         reserva.setStatus(STATUS.COMPLETED.ordinal());
@@ -52,7 +51,7 @@ class ReservaRepositoryTest {
     void givenNoBookings_whenFindByDay_thenReturnEmpty(){
         List<Reserva> bookings = repository.findByDia(day);
 
-        assertThat(bookings).hasSize(0);
+        assertThat(bookings).isEmpty();
     }
 
     @Test

@@ -17,7 +17,7 @@ public class Restaurant {
     // Restaurant opens at 11:00 and closes at 15:00. It re-opens at 18:00 up until 23:00
     public Restaurant(){
         this.quantidadeMesas = 150L;
-        this.dailySlots = new LinkedList<LocalTime>(Arrays.asList(
+        this.dailySlots = new LinkedList<>(Arrays.asList(
             LocalTime.of(11, 0),
             LocalTime.of(12, 0),
             LocalTime.of(13, 0),

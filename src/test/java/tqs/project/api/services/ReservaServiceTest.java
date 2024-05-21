@@ -86,8 +86,8 @@ class ReservaServiceTest {
 
         assertThat(availableSlots).hasSize(restaurant.getDailySlots().size() - 2);
 
-        assertThat(!availableSlots.contains(LocalTime.of(11,00)));
-        assertThat(!availableSlots.contains(LocalTime.of(22,00)));
+        assertThat(availableSlots).doesNotContain(LocalTime.of(11,00));
+        assertThat(availableSlots).doesNotContain(LocalTime.of(22,00));
 
         verify(repository, times(1)).findByDia(Mockito.any());
     }
