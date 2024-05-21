@@ -84,10 +84,10 @@ class ReservaServiceTest {
     void givenSomeReservas_whenGetReservasByDay_thenReturnAvailableReservas(){
         List<LocalTime> availableSlots = service.getAvailableSlots(day2);
 
-        assertThat(availableSlots).hasSize(restaurant.getDailySlots().size() - 2);
-
-        assertThat(availableSlots).doesNotContain(LocalTime.of(11,00));
-        assertThat(availableSlots).doesNotContain(LocalTime.of(22,00));
+        assertThat(availableSlots)
+            .hasSize(restaurant.getDailySlots().size() - 2)
+            .doesNotContain(LocalTime.of(11,00))
+            .doesNotContain(LocalTime.of(22,00));
 
         verify(repository, times(1)).findByDia(Mockito.any());
     }
