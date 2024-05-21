@@ -9,5 +9,5 @@ import tqs.project.api.models.Pedido;
 
 @Repository
 public interface PedidoRepository extends JpaRepository<Pedido, Long> {
-    List<Pedido> findAllByStatus(int status);
+    List<Pedido> findAllByStatusOrderByLastModifiedAsc(int status);
 }

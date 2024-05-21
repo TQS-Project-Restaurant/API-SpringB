@@ -65,6 +65,7 @@ public class DataInitializer implements CommandLineRunner {
 
             PEDIDOS[i].setMesa(mesas[i]);
             PEDIDOS[i].setStatus(getRandomInt(STATUS.PENDING.ordinal(), STATUS.CANCELLED.ordinal()));
+            PEDIDOS[i].setLastModified(System.currentTimeMillis() % 1000);
             
             List<Bebida> bebidasList = new ArrayList<>();
             List<Prato> pratosList = new ArrayList<>();
@@ -85,6 +86,7 @@ public class DataInitializer implements CommandLineRunner {
 
         pedidoPending.setMesa(11);
         pedidoPending.setStatus(STATUS.PENDING.ordinal());
+        pedidoPending.setLastModified(System.currentTimeMillis() % 1000);
         pedidoPending.setBebidas(List.of(BEBIDAS[0], BEBIDAS[8]));
         pedidoPending.setPratos(List.of(PRATOS[4], PRATOS[2]));
 
@@ -94,6 +96,7 @@ public class DataInitializer implements CommandLineRunner {
 
         pedidoPreparing.setMesa(12);
         pedidoPreparing.setStatus(STATUS.PREPARING.ordinal());
+        pedidoPreparing.setLastModified(System.currentTimeMillis() % 1000);
         pedidoPreparing.setBebidas(List.of(BEBIDAS[2], BEBIDAS[4], BEBIDAS[9]));
         pedidoPreparing.setPratos(List.of(PRATOS[4], PRATOS[2], PRATOS[3], PRATOS[4], PRATOS[2]));
 
@@ -103,6 +106,7 @@ public class DataInitializer implements CommandLineRunner {
 
         pedidoCompleted.setMesa(13);
         pedidoCompleted.setStatus(STATUS.COMPLETED.ordinal());
+        pedidoCompleted.setLastModified(System.currentTimeMillis() % 1000);
         pedidoCompleted.setBebidas(List.of(BEBIDAS[3]));
         pedidoCompleted.setPratos(List.of(PRATOS[6]));
 
@@ -112,6 +116,7 @@ public class DataInitializer implements CommandLineRunner {
 
         pedidoCancelled.setMesa(14);
         pedidoCancelled.setStatus(STATUS.CANCELLED.ordinal());
+        pedidoCancelled.setLastModified(System.currentTimeMillis() % 1000);
         pedidoCancelled.setBebidas(List.of(BEBIDAS[0], BEBIDAS[8], BEBIDAS[8], BEBIDAS[8], BEBIDAS[8]));
         pedidoCancelled.setPratos(List.of(PRATOS[7], PRATOS[1]));
 

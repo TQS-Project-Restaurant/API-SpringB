@@ -23,12 +23,12 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public List<Pedido> getPendingPedidos() {
-        return pedidoRepository.findAllByStatus(STATUS.PENDING.ordinal());
+        return pedidoRepository.findAllByStatusOrderByLastModifiedAsc(STATUS.PENDING.ordinal());
     }
 
     @Override
     public List<Pedido> getPreparingPedidos() {
-        return pedidoRepository.findAllByStatus(STATUS.PREPARING.ordinal());
+        return pedidoRepository.findAllByStatusOrderByLastModifiedAsc(STATUS.PREPARING.ordinal());
     }
 
     @Override
@@ -48,6 +48,7 @@ public class PedidoServiceImpl implements PedidoService {
         pedidoToUpdate.setPratos(pedido.getPratos());
         pedidoToUpdate.setMesa(pedido.getMesa());
         pedidoToUpdate.setStatus(pedido.getStatus());
+        pedidoToUpdate.setLastModified(System.currentTimeMillis() % 1000);
 
         return pedidoRepository.save(pedidoToUpdate);
     }
