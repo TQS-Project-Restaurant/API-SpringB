@@ -1,6 +1,7 @@
 package tqs.project.api.models;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,4 +37,7 @@ public class Reserva {
 
     @Column(nullable = false)
     private LocalDate dia;
+
+    @Column(nullable = false)
+    private LocalTime hora;
 }
