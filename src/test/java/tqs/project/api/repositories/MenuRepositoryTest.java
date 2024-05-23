@@ -37,8 +37,8 @@ class MenuRepositoryTest {
 
     @Test
     void givenSetOfMenus_whenFindDailyMenu_thenReturnDailyMenu(){
-        Menu menu = repository.findByDia(LocalDate.now());
+        Menu found = repository.findByDia(LocalDate.now());
 
-        assertThat(menu.getDia()).isEqualTo(LocalDate.now().toString());
+        assertThat(found.getDia()).isEqualTo(LocalDate.now().toString());
     }
 }

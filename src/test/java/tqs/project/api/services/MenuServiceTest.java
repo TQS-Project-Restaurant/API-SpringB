@@ -37,17 +37,17 @@ class MenuServiceTest {
     void givenMenu_whenGetDailyMenu_thenReturnTodaysMenu(){
         when(repository.findByDia(LocalDate.now())).thenReturn(menu);
 
-        Menu menu = service.getDailyMenu();
+        Menu found = service.getDailyMenu();
 
-        assertThat(menu.getDia()).isEqualTo(LocalDate.now().toString());
+        assertThat(found.getDia()).isEqualTo(LocalDate.now().toString());
         verify(repository, times(1)).findByDia(LocalDate.now());
     }
 
     @Test
     void givenNoMenu_whenGetDailyMenu_thenReturnTodaysMenu(){
-        Menu menu = service.getDailyMenu();
+        Menu found = service.getDailyMenu();
 
-        assertThat(menu).isNull();
+        assertThat(found).isNull();
         verify(repository, times(1)).findByDia(LocalDate.now());
     }
 }
