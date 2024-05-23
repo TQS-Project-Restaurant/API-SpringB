@@ -27,11 +27,23 @@ public class ReservaServiceImpl implements ReservaService{
 
         List<LocalTime> availableSlots = restaurant.getDailySlots();
         List<Reserva> bookings = reservaRepository.findByDia(date);
+        List<LocalTime> slotsToRemove = new ArrayList<>();
 
-        for (Reserva reserva : bookings) {
-            availableSlots.remove(reserva.getHora());
+        int usedTables = 0;
+
+        for (LocalTime hour : availableSlots){
+            for (Reserva reserva : bookings) {
+                if (reserva.getHora() == hour){
+                    usedTables += reserva.getQuantidadeMesas();
+                }
+            }
+            if (usedTables == restaurant.getTotalTables()){
+                slotsToRemove.add(hour);
+            }
         }
-        
+
+        availableSlots.removeAll(slotsToRemove);
+
         return availableSlots;
     }
 }

@@ -56,7 +56,7 @@ class ReservaServiceTest {
 
         Reserva reserva = new Reserva();
         reserva.setUtilizador(utilizador);
-        reserva.setQuantidadeMesas(2);
+        reserva.setQuantidadeMesas(10);
         reserva.setStatus(STATUS.COMPLETED.ordinal());
         reserva.setDia(day);
         reserva.setHora(LocalTime.of(11,00));
@@ -66,7 +66,7 @@ class ReservaServiceTest {
         reserva2.setQuantidadeMesas(1);
         reserva2.setStatus(STATUS.COMPLETED.ordinal());
         reserva2.setDia(day);
-        reserva2.setHora(LocalTime.of(22,00));
+        reserva2.setHora(LocalTime.of(12,00));
 
         List<Reserva> someBookings = Arrays.asList(reserva, reserva2);
         when(repository.findByDia(day2)).thenReturn(someBookings);
@@ -85,9 +85,8 @@ class ReservaServiceTest {
         List<LocalTime> availableSlots = service.getAvailableSlots(day2);
 
         assertThat(availableSlots)
-            .hasSize(restaurant.getDailySlots().size() - 2)
-            .doesNotContain(LocalTime.of(11,00))
-            .doesNotContain(LocalTime.of(22,00));
+            .hasSize(restaurant.getDailySlots().size() - 1)
+            .doesNotContain(LocalTime.of(11,00));
 
         verify(repository, times(1)).findByDia(Mockito.any());
     }

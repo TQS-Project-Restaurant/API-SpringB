@@ -10,13 +10,13 @@ import lombok.Getter;
 // Opted to not add Setters since it does not fit our purpose here.
 @Getter
 public class Restaurant {
-    private Long quantidadeMesas;
+    private Long totalTables;
 
     private List<LocalTime> dailySlots; 
 
     // Restaurant opens at 11:00 and closes at 15:00. It re-opens at 18:00 up until 23:00
     public Restaurant(){
-        this.quantidadeMesas = 150L;
+        this.totalTables = 10L;
         this.dailySlots = new LinkedList<>(Arrays.asList(
             LocalTime.of(11, 0),
             LocalTime.of(12, 0),
