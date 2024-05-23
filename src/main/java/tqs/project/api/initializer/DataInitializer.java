@@ -1,6 +1,8 @@
 package tqs.project.api.initializer;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +11,12 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import tqs.project.api.models.Bebida;
+import tqs.project.api.models.Menu;
 import tqs.project.api.models.Pedido;
 import tqs.project.api.models.Prato;
 import tqs.project.api.others.STATUS;
 import tqs.project.api.repositories.BebidaRepository;
+import tqs.project.api.repositories.MenuRepository;
 import tqs.project.api.repositories.PedidoRepository;
 import tqs.project.api.repositories.PratoRepository;
 
@@ -23,18 +27,22 @@ public class DataInitializer implements CommandLineRunner {
     BebidaRepository bebidaRepository;
     PratoRepository pratoRepository;
     PedidoRepository pedidoRepository;
+    MenuRepository menuRepository;
 
     int TOTAL_PEDIDOS = 10;
 
     Bebida[] BEBIDAS = new Bebida[TOTAL_PEDIDOS];
     Prato[] PRATOS = new Prato[TOTAL_PEDIDOS];
     Pedido[] PEDIDOS = new Pedido[TOTAL_PEDIDOS];
+    Menu[] MENUS = new Menu[3];
 
     @Autowired
-    public DataInitializer(BebidaRepository bebidaRepository, PratoRepository pratoRepository, PedidoRepository pedidoRepository){
+    public DataInitializer(BebidaRepository bebidaRepository, PratoRepository pratoRepository, PedidoRepository pedidoRepository,
+                            MenuRepository menuRepository){
         this.bebidaRepository = bebidaRepository;
         this.pratoRepository = pratoRepository;
         this.pedidoRepository = pedidoRepository;
+        this.menuRepository = menuRepository;
     }
 
     public void run(String... args) throws Exception{
@@ -45,6 +53,7 @@ public class DataInitializer implements CommandLineRunner {
         this.loadBebidas();
         this.loadPratos();
         this.loadPedidos();
+        this.loadMenus();
     }
 
     public int getRandomInt(int min, int max) {
@@ -182,4 +191,31 @@ public class DataInitializer implements CommandLineRunner {
             PRATOS[i] = pratoRepository.save(PRATOS[i]);
         }
     }
+
+    private void loadMenus(){
+        MENUS[0] = new Menu();
+
+        MENUS[0].setDia(LocalDate.now());
+        MENUS[0].setPratos(Arrays.asList(PRATOS[0], PRATOS[1], PRATOS[6], PRATOS[9]));
+        MENUS[0].setBebidas(Arrays.asList(BEBIDAS[0], BEBIDAS[1], BEBIDAS[6], BEBIDAS[9]));
+
+        menuRepository.save(MENUS[0]);
+
+        MENUS[1] = new Menu();
+
+        MENUS[1].setDia(LocalDate.now().plusDays(1));
+        MENUS[1].setPratos(Arrays.asList(PRATOS[4], PRATOS[2], PRATOS[6], PRATOS[7]));
+        MENUS[1].setBebidas(Arrays.asList(BEBIDAS[2], BEBIDAS[1], BEBIDAS[4], BEBIDAS[3]));
+
+        menuRepository.save(MENUS[1]);
+
+        MENUS[2] = new Menu();
+
+        MENUS[2].setDia(LocalDate.now().plusDays(2));
+        MENUS[2].setPratos(Arrays.asList(PRATOS[3], PRATOS[8], PRATOS[5], PRATOS[0]));
+        MENUS[2].setBebidas(Arrays.asList(BEBIDAS[7], BEBIDAS[5], BEBIDAS[8], BEBIDAS[9]));
+
+        menuRepository.save(MENUS[2]);
+    }
+
 }
