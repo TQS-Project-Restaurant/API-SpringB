@@ -30,6 +30,6 @@ public class Menu {
     @ManyToMany
     private List<Bebida> bebidas;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private LocalDate dia;
 }
