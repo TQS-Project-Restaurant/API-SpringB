@@ -47,12 +47,12 @@ class ReservaServiceTest {
         Utilizador utilizador = new Utilizador();
         utilizador.setEmail("nice-email@gmail.com");
         utilizador.setPassword("123123123");
-        utilizador.setRole(ROLES.USER.ordinal());
+        utilizador.setRole(ROLES.USER);
 
         Utilizador utilizador2 = new Utilizador();
         utilizador2.setEmail("nolimits88@live.com.pt");
         utilizador2.setPassword("0987654321");
-        utilizador2.setRole(ROLES.USER.ordinal());
+        utilizador2.setRole(ROLES.USER);
 
         Reserva reserva = new Reserva();
         reserva.setUtilizador(utilizador);
