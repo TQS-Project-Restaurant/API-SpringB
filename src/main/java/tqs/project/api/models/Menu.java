@@ -3,6 +3,8 @@ package tqs.project.api.models;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,6 +37,7 @@ public class Menu {
     private List<Bebida> bebidas;
 
     @Column(nullable = false, unique = true)
+    @JsonFormat(pattern="yyyy-MM-dd")
     @Schema(description = "Menu's date", example = "2024-05-28", required = true)
     private LocalDate dia;
 }

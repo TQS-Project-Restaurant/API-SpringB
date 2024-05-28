@@ -3,6 +3,8 @@ package tqs.project.api.models;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -41,6 +43,7 @@ public class Reserva {
     private int status;
 
     @Column(nullable = false)
+    @JsonFormat(pattern="yyyy-MM-dd")
     @Schema(description = "Booking's date", example = "2024-05-28", required = true)
     private LocalDate dia;
 
