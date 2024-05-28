@@ -8,10 +8,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import tqs.project.api.models.Prato;
 import tqs.project.api.services.PratoService;
 
 @RestController
+@Tag(name = "Dish API")
 @RequestMapping("/api/dishes")
 @CrossOrigin(origins = "http://localhost:3000")
 public class PratoController {
@@ -22,6 +27,12 @@ public class PratoController {
         this.pratoService = pratoService;
     }
 
+
+    @Operation(summary = "Get dish by ID", description = "Returns dish object by given ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+        @ApiResponse(responseCode = "404", description = "No dish was found with given ID")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<Prato> getPrato(@PathVariable Long id){
         Prato prato = pratoService.getPrato(id);
