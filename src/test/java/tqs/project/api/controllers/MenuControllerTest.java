@@ -50,7 +50,7 @@ class MenuControllerTest {
             .then()
                 .statusCode(HttpStatus.SC_OK)
                 .assertThat()
-                .body("dia", is(LocalDate.now().toString()));
+                .body("dia", is(menu.getDia().toString()));
 
         verify(service, times(1)).getDailyMenu();
     }
