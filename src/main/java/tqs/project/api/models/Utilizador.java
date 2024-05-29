@@ -50,7 +50,12 @@ public class Utilizador implements UserDetails{
 
     @Override
     public String getUsername() {
-        return this.email;
+        return email;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
     }
 
     @Override
