@@ -11,22 +11,28 @@ import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
+import tqs.project.api.configuration.JwtAuthenticationFilter;
 import tqs.project.api.others.Restaurant;
 import tqs.project.api.services.ReservaService;
 
 @WebMvcTest(ReservaController.class)
+@AutoConfigureMockMvc(addFilters = false)
 class ReservaControllerTest {
     @Autowired
     MockMvc mvc;
 
     @MockBean
     private ReservaService service;
+
+    @MockBean
+    JwtAuthenticationFilter jwtAuthenticationFilter;
 
     LocalDate day = LocalDate.parse("2024-01-01");
     Restaurant restaurant = new Restaurant();
