@@ -3,6 +3,7 @@ package tqs.project.api.configuration;
 import java.io.IOException;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
@@ -16,15 +17,19 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import tqs.project.api.services.JwtService;
 import tqs.project.api.services.UserService;
 
 @Component
-@RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserService userService;
+
+    @Autowired
+    public JwtAuthenticationFilter(JwtService jwtService,UserService userService){
+        this.jwtService = jwtService;
+        this.userService = userService;
+    }
     
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, 
