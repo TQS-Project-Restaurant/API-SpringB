@@ -35,7 +35,7 @@ class ReservaRepositoryTest {
         Utilizador utilizador = new Utilizador();
         utilizador.setEmail("nice-email@gmail.com");
         utilizador.setPassword("123123123");
-        utilizador.setRole(ROLES.USER.ordinal());
+        utilizador.setRole(ROLES.USER);
 
         reserva.setUtilizador(utilizador);
         reserva.setQuantidadeMesas(2);

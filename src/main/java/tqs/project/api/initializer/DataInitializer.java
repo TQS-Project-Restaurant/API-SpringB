@@ -8,17 +8,21 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import tqs.project.api.models.Bebida;
 import tqs.project.api.models.Menu;
 import tqs.project.api.models.Pedido;
 import tqs.project.api.models.Prato;
+import tqs.project.api.models.Utilizador;
+import tqs.project.api.others.ROLES;
 import tqs.project.api.others.STATUS;
 import tqs.project.api.repositories.BebidaRepository;
 import tqs.project.api.repositories.MenuRepository;
 import tqs.project.api.repositories.PedidoRepository;
 import tqs.project.api.repositories.PratoRepository;
+import tqs.project.api.repositories.UtilizadorRepository;
 
 @Component
 @Profile("!test")
@@ -28,6 +32,8 @@ public class DataInitializer implements CommandLineRunner {
     PratoRepository pratoRepository;
     PedidoRepository pedidoRepository;
     MenuRepository menuRepository;
+    UtilizadorRepository utilizadorRepository;
+    PasswordEncoder passwordEncoder;
 
     int TOTAL_PEDIDOS = 10;
 
@@ -35,14 +41,17 @@ public class DataInitializer implements CommandLineRunner {
     Prato[] PRATOS = new Prato[TOTAL_PEDIDOS];
     Pedido[] PEDIDOS = new Pedido[TOTAL_PEDIDOS];
     Menu[] MENUS = new Menu[3];
+    Utilizador[] UTILIZADORES = new Utilizador[4];
 
     @Autowired
     public DataInitializer(BebidaRepository bebidaRepository, PratoRepository pratoRepository, PedidoRepository pedidoRepository,
-                            MenuRepository menuRepository){
+                            MenuRepository menuRepository, UtilizadorRepository utilizadorRepository, PasswordEncoder passwordEncoder){
         this.bebidaRepository = bebidaRepository;
         this.pratoRepository = pratoRepository;
         this.pedidoRepository = pedidoRepository;
         this.menuRepository = menuRepository;
+        this.utilizadorRepository = utilizadorRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public void run(String... args) throws Exception{
@@ -54,6 +63,7 @@ public class DataInitializer implements CommandLineRunner {
         this.loadPratos();
         this.loadPedidos();
         this.loadMenus();
+        this.loadUsers();
     }
 
     public int getRandomInt(int min, int max) {
@@ -218,4 +228,40 @@ public class DataInitializer implements CommandLineRunner {
         menuRepository.save(MENUS[2]);
     }
 
+    private void loadUsers(){
+        UTILIZADORES[0] = new Utilizador();
+
+        UTILIZADORES[0].setEmail("user@gmail.com");
+        UTILIZADORES[0].setPassword(passwordEncoder.encode("user"));
+        UTILIZADORES[0].setRole(ROLES.USER);
+
+        utilizadorRepository.save(UTILIZADORES[0]);
+
+
+        UTILIZADORES[1] = new Utilizador();
+
+        UTILIZADORES[1].setEmail("kitchen@gmail.com");
+        UTILIZADORES[1].setPassword(passwordEncoder.encode("kitchen"));
+        UTILIZADORES[1].setRole(ROLES.KITCHEN);
+
+        utilizadorRepository.save(UTILIZADORES[1]);
+
+
+        UTILIZADORES[2] = new Utilizador();
+
+        UTILIZADORES[2].setEmail("waiter@gmail.com");
+        UTILIZADORES[2].setPassword(passwordEncoder.encode("waiter"));
+        UTILIZADORES[2].setRole(ROLES.WAITER);
+
+        utilizadorRepository.save(UTILIZADORES[2]);
+
+
+        UTILIZADORES[3] = new Utilizador();
+
+        UTILIZADORES[3].setEmail("user2@gmail.com");
+        UTILIZADORES[3].setPassword(passwordEncoder.encode("user2"));
+        UTILIZADORES[3].setRole(ROLES.USER);
+
+        utilizadorRepository.save(UTILIZADORES[3]);
+    }
 }

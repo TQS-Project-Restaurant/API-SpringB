@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -22,10 +23,12 @@ import java.util.List;
 import org.apache.http.HttpStatus;
 
 import tqs.project.api.services.PedidoService;
+import tqs.project.api.configuration.JwtAuthenticationFilter;
 import tqs.project.api.models.Pedido;
 import tqs.project.api.others.STATUS;
 
 @WebMvcTest(PedidoController.class)
+@AutoConfigureMockMvc(addFilters = false)
 class PedidoControllerTest {
     
     @Autowired
@@ -33,6 +36,9 @@ class PedidoControllerTest {
 
     @MockBean
     private PedidoService service;
+
+    @MockBean
+    JwtAuthenticationFilter jwtAuthenticationFilter;
 
     Pedido pedido = new Pedido();
     Pedido pedido2 = new Pedido();
