@@ -113,6 +113,7 @@ class ReservaServiceTest {
 
         Reserva found = service.createBooking(innerReserva);
 
+        assertThat(utilizador.getReservas()).isNotNull();
         assertThat(found).isEqualTo(innerReserva);
         verify(reservaRepository, times(1)).save(Mockito.any());
     }
