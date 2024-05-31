@@ -48,6 +48,7 @@ class ReservaControllerTest {
     LocalDate day = LocalDate.parse("2024-01-01");
     Restaurant restaurant = new Restaurant();
     Reserva reserva = new Reserva();
+    Utilizador utilizador = new Utilizador();
 
     @BeforeEach
     void setUp(){
@@ -56,7 +57,6 @@ class ReservaControllerTest {
         reserva.setHora(LocalTime.now());
         reserva.setStatus(STATUS.PENDING.ordinal());
 
-        Utilizador utilizador = new Utilizador();
         utilizador.setEmail("user@gmail.com");
         utilizador.setPassword("password");
         utilizador.setRole(ROLES.USER);
@@ -97,6 +97,30 @@ class ReservaControllerTest {
                 .assertThat()
                 .body("utilizador.email", is("user@gmail.com"))
                 .body("status", is(STATUS.PENDING.ordinal()));
+
+        verify(service, times(1)).createBooking(Mockito.any());
+    }
+
+    @Test
+    void whenCreateInvalidBooking_thenReturnBadRequest() {
+        Reserva innerReserva = new Reserva();
+        innerReserva.setHora(LocalTime.now());
+        innerReserva.setDia(LocalDate.now());
+        innerReserva.setQuantidadeMesas(12);
+        innerReserva.setStatus(STATUS.PENDING.ordinal());
+        innerReserva.setUtilizador(utilizador);
+
+        when(service.createBooking(Mockito.any())).thenReturn(null);
+
+        RestAssuredMockMvc
+        .given()
+            .mockMvc(mvc)
+            .contentType(ContentType.JSON)
+            .body(innerReserva)
+        .when()
+            .post("/api/bookings")
+        .then()
+            .statusCode(HttpStatus.SC_BAD_REQUEST);
 
         verify(service, times(1)).createBooking(Mockito.any());
     }
