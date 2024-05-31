@@ -7,6 +7,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,8 +33,8 @@ public class Utilizador implements UserDetails{
     private Long id;
 
     @OneToMany
-    @JoinColumn(name = "reserva")
-    private List<Reserva> reserva;
+    @JoinColumn(name = "reservas")
+    private List<Reserva> reservas;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -44,6 +46,7 @@ public class Utilizador implements UserDetails{
     private ROLES role;
 
     @Override
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }

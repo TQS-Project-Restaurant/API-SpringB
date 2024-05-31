@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,14 +51,20 @@ public class ReservaController {
         return new ResponseEntity<>(availableSlots, HttpStatus.OK);
     }
 
+
     @Operation(summary = "Post booking on selected date", description = "Returns booked object and confirmation")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201",
                     description = "Successfully created")
     })
     @PostMapping
-    public ResponseEntity<Reserva> createBooking(){
-        Reserva booking = reservaService.createBooking();
+    public ResponseEntity<Reserva> createBooking(@RequestBody Reserva reserva){
+        Reserva booking = reservaService.createBooking(reserva);
+
+        if (booking == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         return new ResponseEntity<>(booking, HttpStatus.CREATED);
     }
 }

@@ -18,15 +18,15 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import tqs.project.api.services.JwtService;
-import tqs.project.api.services.UserService;
+import tqs.project.api.services.CustomUserDetailsService;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
-    private final UserService userService;
+    private final CustomUserDetailsService userService;
 
     @Autowired
-    public JwtAuthenticationFilter(JwtService jwtService,UserService userService){
+    public JwtAuthenticationFilter(JwtService jwtService,CustomUserDetailsService userService){
         this.jwtService = jwtService;
         this.userService = userService;
     }

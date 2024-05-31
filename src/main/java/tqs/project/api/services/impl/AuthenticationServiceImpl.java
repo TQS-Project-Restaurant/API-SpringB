@@ -10,7 +10,7 @@ import tqs.project.api.models.Utilizador;
 import tqs.project.api.repositories.UtilizadorRepository;
 import tqs.project.api.services.AuthenticationService;
 import tqs.project.api.services.JwtService;
-import tqs.project.api.services.UserService;
+import tqs.project.api.services.CustomUserDetailsService;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -18,12 +18,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final UtilizadorRepository utilizadorRepository;
     private final JwtService jwtService;
-    private final UserService userService;
+    private final CustomUserDetailsService userService;
 
     public AuthenticationServiceImpl(AuthenticationManager authenticationManager, 
                                         UtilizadorRepository utilizadorRepository,
                                         JwtService jwtService,
-                                        UserService userService){
+                                        CustomUserDetailsService userService){
         this.authenticationManager = authenticationManager;
         this.utilizadorRepository = utilizadorRepository;
         this.jwtService = jwtService;
