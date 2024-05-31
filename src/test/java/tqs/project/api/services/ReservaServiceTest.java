@@ -55,6 +55,7 @@ class ReservaServiceTest {
         utilizador.setEmail("nice-email@gmail.com");
         utilizador.setPassword("123123123");
         utilizador.setRole(ROLES.USER);
+        utilizador.setReservas(null);
 
         utilizador2.setEmail("nolimits88@live.com.pt");
         utilizador2.setPassword("0987654321");
