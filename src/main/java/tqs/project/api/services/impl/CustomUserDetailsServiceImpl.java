@@ -12,11 +12,11 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import tqs.project.api.models.Utilizador;
 import tqs.project.api.repositories.UtilizadorRepository;
-import tqs.project.api.services.UserService;
+import tqs.project.api.services.CustomUserDetailsService;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
     private final UtilizadorRepository utilizadorRepository;
 
     @Override

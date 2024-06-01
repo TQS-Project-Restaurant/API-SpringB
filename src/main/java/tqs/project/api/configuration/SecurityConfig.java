@@ -18,16 +18,16 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import tqs.project.api.others.ROLES;
-import tqs.project.api.services.UserService;
+import tqs.project.api.services.CustomUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final UserService userService;
+    private final CustomUserDetailsService userService;
 
     @Autowired
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter,UserService userService){
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, CustomUserDetailsService userService){
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.userService = userService;
     }

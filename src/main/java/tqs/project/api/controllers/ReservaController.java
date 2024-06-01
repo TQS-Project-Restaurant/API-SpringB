@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +20,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import tqs.project.api.models.Reserva;
 import tqs.project.api.services.ReservaService;
 
 @RestController
@@ -46,5 +49,22 @@ public class ReservaController {
         List<LocalTime> availableSlots = reservaService.getAvailableSlots(bookingDate);
 
         return new ResponseEntity<>(availableSlots, HttpStatus.OK);
+    }
+
+
+    @Operation(summary = "Post booking on selected date", description = "Returns booked object and confirmation")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201",
+                    description = "Successfully created")
+    })
+    @PostMapping
+    public ResponseEntity<Reserva> createBooking(@RequestBody Reserva reserva){
+        Reserva booking = reservaService.createBooking(reserva);
+
+        if (booking == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(booking, HttpStatus.CREATED);
     }
 }
