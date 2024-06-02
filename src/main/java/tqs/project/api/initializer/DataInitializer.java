@@ -1,8 +1,10 @@
 package tqs.project.api.initializer;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import tqs.project.api.models.Bebida;
 import tqs.project.api.models.Menu;
 import tqs.project.api.models.Pedido;
 import tqs.project.api.models.Prato;
+import tqs.project.api.models.Reserva;
 import tqs.project.api.models.Utilizador;
 import tqs.project.api.others.ROLES;
 import tqs.project.api.others.STATUS;
@@ -22,6 +25,7 @@ import tqs.project.api.repositories.BebidaRepository;
 import tqs.project.api.repositories.MenuRepository;
 import tqs.project.api.repositories.PedidoRepository;
 import tqs.project.api.repositories.PratoRepository;
+import tqs.project.api.repositories.ReservaRepository;
 import tqs.project.api.repositories.UtilizadorRepository;
 
 @Component
@@ -34,6 +38,7 @@ public class DataInitializer implements CommandLineRunner {
     MenuRepository menuRepository;
     UtilizadorRepository utilizadorRepository;
     PasswordEncoder passwordEncoder;
+    ReservaRepository reservaRepository;
 
     int TOTAL_PEDIDOS = 10;
 
@@ -45,13 +50,14 @@ public class DataInitializer implements CommandLineRunner {
 
     @Autowired
     public DataInitializer(BebidaRepository bebidaRepository, PratoRepository pratoRepository, PedidoRepository pedidoRepository,
-                            MenuRepository menuRepository, UtilizadorRepository utilizadorRepository, PasswordEncoder passwordEncoder){
+                            MenuRepository menuRepository, UtilizadorRepository utilizadorRepository, PasswordEncoder passwordEncoder,ReservaRepository reservaRepository){
         this.bebidaRepository = bebidaRepository;
         this.pratoRepository = pratoRepository;
         this.pedidoRepository = pedidoRepository;
         this.menuRepository = menuRepository;
         this.utilizadorRepository = utilizadorRepository;
         this.passwordEncoder = passwordEncoder;
+        this.reservaRepository = reservaRepository;
     }
 
     public void run(String... args) throws Exception{
@@ -235,7 +241,7 @@ public class DataInitializer implements CommandLineRunner {
         UTILIZADORES[0].setPassword(passwordEncoder.encode("user"));
         UTILIZADORES[0].setRole(ROLES.USER);
 
-        utilizadorRepository.save(UTILIZADORES[0]);
+        UTILIZADORES[0] = utilizadorRepository.save(UTILIZADORES[0]);
 
 
         UTILIZADORES[1] = new Utilizador();
@@ -262,6 +268,24 @@ public class DataInitializer implements CommandLineRunner {
         UTILIZADORES[3].setPassword(passwordEncoder.encode("user2"));
         UTILIZADORES[3].setRole(ROLES.USER);
 
-        utilizadorRepository.save(UTILIZADORES[3]);
+        
+        UTILIZADORES[3] = utilizadorRepository.save(UTILIZADORES[3]);
+
+        Reserva res = new Reserva();
+        res.setDia(LocalDate.of(2024, 6, 20));
+        res.setHora(LocalTime.now());
+        res.setQuantidadeMesas(2);
+        res.setStatus(0);
+        res.setUtilizador(UTILIZADORES[0]);
+        reservaRepository.save(res);
+    
+        Reserva res2 = new Reserva();
+        res2.setDia(LocalDate.of(2024, 6, 20));
+        res2.setHora(LocalTime.now());
+        res2.setQuantidadeMesas(3);
+        res2.setStatus(0);
+        res2.setUtilizador(UTILIZADORES[3]);
+    
+        reservaRepository.save(res2);
     }
 }

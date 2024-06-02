@@ -50,5 +50,6 @@ public class Reserva {
 
     @Column(nullable = false)
     @Schema(description = "Booking's hour", example = "10:00", requiredMode = RequiredMode.REQUIRED)
+    @JsonFormat(pattern="HH:mm")
     private LocalTime hora;
 }
