@@ -75,8 +75,16 @@ class ReservaServiceTest {
         reserva2.setDia(day);
         reserva2.setHora(LocalTime.of(12,00));
 
+        Reserva reserva3 = new Reserva();
+        reserva3.setUtilizador(utilizador2);
+        reserva3.setQuantidadeMesas(1);
+        reserva3.setStatus(STATUS.PENDING.ordinal());
+        reserva3.setDia(day);
+        reserva3.setHora(LocalTime.of(12,00));
+
         List<Reserva> someBookings = Arrays.asList(reserva, reserva2);
         when(reservaRepository.findByDia(day2)).thenReturn(someBookings);
+        when(reservaRepository.findAllByStatus(STATUS.PENDING.ordinal())).thenReturn(Arrays.asList(reserva3));
     }
 
     @Test
@@ -147,5 +155,13 @@ class ReservaServiceTest {
 
         assertThat(bookings).hasSize(1);
         verify(reservaRepository, times(1)).findByUtilizador(Mockito.any());
+    }
+
+    @Test
+    void givenBookings_whenGetPendingBookings_thenReturnPendingList(){
+        List<Reserva> bookings = service.getPendingBookings();
+
+        assertThat(bookings).hasSize(1);
+        verify(reservaRepository, times(1)).findAllByStatus(STATUS.PENDING.ordinal());
     }
 }

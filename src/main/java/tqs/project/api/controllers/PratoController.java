@@ -18,7 +18,7 @@ import tqs.project.api.services.PratoService;
 @RestController
 @Tag(name = "Dish API")
 @RequestMapping("/api/dishes")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class PratoController {
     
     private final PratoService pratoService;

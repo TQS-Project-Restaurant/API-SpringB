@@ -17,7 +17,7 @@ import tqs.project.api.services.MenuService;
 @RestController
 @Tag(name = "Menu API")
 @RequestMapping("/api/menu")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class MenuController {
 
     private final MenuService menuService;

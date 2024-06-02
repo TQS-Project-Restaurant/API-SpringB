@@ -13,4 +13,6 @@ public interface ReservaService {
     Reserva createBooking(ReservaRequest reserva, String email);
 
     List<Reserva> getUserBookings(String email);
+
+    List<Reserva> getPendingBookings();
 }

@@ -85,4 +85,11 @@ class ReservaRepositoryTest {
 
         assertThat(bookings).isEmpty();
     }
+
+    @Test
+    void givenManyBookings_whenFindByStatus_thenReturnBookingsByStatus(){
+        List<Reserva> bookings = repository.findAllByStatus(STATUS.COMPLETED.ordinal());
+
+        assertThat(bookings).hasSize(1);
+    }
 }
