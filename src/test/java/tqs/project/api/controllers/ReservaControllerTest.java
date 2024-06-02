@@ -220,6 +220,20 @@ class ReservaControllerTest {
     }
 
     @Test
+    void whenGetPendingBookingsWithoutAuthentication_thenReturnBadRequest(){
+        when(securityContext.getAuthentication()).thenReturn(null);
+
+        RestAssuredMockMvc
+        .given()
+            .mockMvc(mvc)
+            .contentType(ContentType.JSON)
+        .when()
+            .get("/api/bookings/pending")
+        .then()
+            .statusCode(HttpStatus.SC_BAD_REQUEST);
+    }
+
+    @Test
     @WithMockUser(roles = "WAITER")
     void whenConfirmBooking_thenReturnUpdatedBooking(){
         Reserva completedBooking = new Reserva();
@@ -242,6 +256,20 @@ class ReservaControllerTest {
             .body("status", is(STATUS.COMPLETED.ordinal()));
 
         verify(service, times(1)).confirmBooking(Mockito.any());
+    }
+
+    @Test
+    void whenPutConfirmBookingWithoutAuthentication_thenReturnBadRequest(){
+        when(securityContext.getAuthentication()).thenReturn(null);
+
+        RestAssuredMockMvc
+        .given()
+            .mockMvc(mvc)
+            .contentType(ContentType.JSON)
+        .when()
+            .put("/api/bookings/confirm/1")
+        .then()
+            .statusCode(HttpStatus.SC_BAD_REQUEST);
     }
 
 
@@ -268,5 +296,19 @@ class ReservaControllerTest {
             .body("status", is(STATUS.CANCELLED.ordinal()));
 
         verify(service, times(1)).cancelBooking(Mockito.any());
+    }
+
+    @Test
+    void whenPutCancelBookingWithoutAuthentication_thenReturnBadRequest(){
+        when(securityContext.getAuthentication()).thenReturn(null);
+
+        RestAssuredMockMvc
+        .given()
+            .mockMvc(mvc)
+            .contentType(ContentType.JSON)
+        .when()
+            .put("/api/bookings/cancel/1")
+        .then()
+            .statusCode(HttpStatus.SC_BAD_REQUEST);
     }
 }

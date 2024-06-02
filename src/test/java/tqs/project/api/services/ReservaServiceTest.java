@@ -183,6 +183,14 @@ class ReservaServiceTest {
     }
 
     @Test
+    void givenInvalidBookingIdToUpdate_whenConfirmBooking_thenReturnNull() {
+        Reserva found = service.confirmBooking(1L);
+
+        assertThat(found).isNull();
+        verify(reservaRepository, times(1)).findById(Mockito.any());
+    }
+
+    @Test
     void givenBookingToUpdate_whenCancelBooking_thenReturnUpdatedBooking() {
         Reserva reservaToUpdate = new Reserva();
         reservaToUpdate.setQuantidadeMesas(5);
@@ -203,5 +211,13 @@ class ReservaServiceTest {
 
         assertThat(updatedReserva.getStatus()).isEqualTo(STATUS.CANCELLED.ordinal());
         verify(reservaRepository, times(1)).findById(1L);
+    }
+
+    @Test
+    void givenInvalidBookingIdToUpdate_whenCancelBooking_thenReturnNull() {
+        Reserva found = service.cancelBooking(1L);
+
+        assertThat(found).isNull();
+        verify(reservaRepository, times(1)).findById(Mockito.any());
     }
 }
