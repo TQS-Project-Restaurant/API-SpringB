@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,7 +57,9 @@ public class ReservaController {
     @Operation(summary = "Post booking on selected date", description = "Returns booked object and confirmation")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201",
-                    description = "Successfully created")
+                    description = "Successfully created"),
+        @ApiResponse(responseCode = "400",
+                    description = "Failed to create booking")
     })
     @PostMapping
     public ResponseEntity<Reserva> createBooking(@RequestBody Reserva reserva){
@@ -66,5 +70,22 @@ public class ReservaController {
         }
 
         return new ResponseEntity<>(booking, HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "Get all bookings from specific user", description = "Returns booking list associated with user")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved")
+    })
+    @GetMapping
+    public ResponseEntity<List<Reserva>> getUserBookings(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        
+        if (authentication == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        List<Reserva> bookings = reservaService.getUserBookings(authentication.getName());
+
+        return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
 }
