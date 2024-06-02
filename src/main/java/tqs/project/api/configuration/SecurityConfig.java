@@ -40,6 +40,7 @@ public class SecurityConfig {
                 request -> request
                 .requestMatchers("api/requests/**").hasAnyRole(ROLES.KITCHEN.toString(),  ROLES.WAITER.toString())
                 .requestMatchers("api/bookings").hasAnyRole(ROLES.KITCHEN.toString(),  ROLES.WAITER.toString(), ROLES.USER.toString())
+                .requestMatchers("api/bookings/pending").hasRole(ROLES.WAITER.toString())
                 .anyRequest().permitAll()
             )
             .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))

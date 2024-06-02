@@ -29,7 +29,7 @@ import tqs.project.api.services.ReservaService;
 @RestController
 @Tag(name = "Booking API")
 @RequestMapping("/api/bookings")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class ReservaController {
 
     private final ReservaService reservaService;
@@ -95,5 +95,23 @@ public class ReservaController {
         List<Reserva> bookings = reservaService.getUserBookings(authentication.getName());
 
         return new ResponseEntity<>(bookings, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Get all pending bookings", description = "Returns list with all pending bookings")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+        @ApiResponse(responseCode = "403", description = "No access has been granted to access this")
+    })
+    @GetMapping("/pending")
+    public ResponseEntity<List<Reserva>> getPendingBookings(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        
+        if (authentication == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        
+        List<Reserva> pendingBookings = reservaService.getPendingBookings();
+
+        return new ResponseEntity<>(pendingBookings, HttpStatus.OK);
     }
 }

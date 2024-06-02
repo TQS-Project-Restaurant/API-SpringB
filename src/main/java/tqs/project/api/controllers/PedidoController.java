@@ -23,7 +23,7 @@ import tqs.project.api.services.PedidoService;
 @RestController
 @Tag(name = "Request API")
 @RequestMapping("/api/requests")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class PedidoController {
 
     private final PedidoService pedidoService;

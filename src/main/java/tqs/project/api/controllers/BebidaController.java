@@ -18,7 +18,7 @@ import tqs.project.api.services.BebidaService;
 @RestController
 @Tag(name = "Beverage API")
 @RequestMapping("/api/beverages")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class BebidaController {
     
     private final BebidaService bebidaService;

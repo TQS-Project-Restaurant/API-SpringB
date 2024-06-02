@@ -98,4 +98,10 @@ public class ReservaServiceImpl implements ReservaService{
     public List<Reserva> getUserBookings(String email) {
         return reservaRepository.findByUtilizador(utilizadorRepository.findByEmail(email).orElse(null));
     }
+
+
+    @Override
+    public List<Reserva> getPendingBookings() {
+        return reservaRepository.findAllByStatus(STATUS.PENDING.ordinal());
+    }
 }

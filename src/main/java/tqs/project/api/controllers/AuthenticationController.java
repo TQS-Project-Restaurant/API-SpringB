@@ -16,7 +16,7 @@ import tqs.project.api.services.AuthenticationService;
 @RestController
 @Tag(name = "Authentication API")
 @RequestMapping("/api/authentication")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class AuthenticationController {
     
     private final AuthenticationService authenticationService;
