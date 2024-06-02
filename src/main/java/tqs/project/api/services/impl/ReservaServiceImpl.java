@@ -53,6 +53,7 @@ public class ReservaServiceImpl implements ReservaService{
         return availableSlots;
     }
 
+    
     @Override
     public Reserva createBooking(Reserva reserva){
         List<Reserva> bookings = reservaRepository.findByDiaAndHora(reserva.getDia(), reserva.getHora());
@@ -80,5 +81,11 @@ public class ReservaServiceImpl implements ReservaService{
         utilizadorRepository.save(utilizador);
 
         return saved;
+    }
+
+
+    @Override
+    public List<Reserva> getUserBookings(String email) {
+        return reservaRepository.findByUtilizador(utilizadorRepository.findByEmail(email).orElse(null));
     }
 }

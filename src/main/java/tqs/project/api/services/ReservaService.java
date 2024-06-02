@@ -10,4 +10,6 @@ public interface ReservaService {
     List<LocalTime> getAvailableSlots(LocalDate date);
 
     Reserva createBooking(Reserva reserva);
+
+    List<Reserva> getUserBookings(String email);
 }

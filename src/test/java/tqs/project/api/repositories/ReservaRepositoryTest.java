@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -28,11 +29,11 @@ class ReservaRepositoryTest {
     LocalDate day = LocalDate.parse("2024-01-01");
     LocalDate day2 = LocalDate.parse("2024-01-02");
     Reserva reserva = new Reserva();
+    Utilizador utilizador = new Utilizador();
 
 
     @BeforeEach
     void setUp(){
-        Utilizador utilizador = new Utilizador();
         utilizador.setEmail("nice-email@gmail.com");
         utilizador.setPassword("123123123");
         utilizador.setRole(ROLES.USER);
@@ -42,6 +43,8 @@ class ReservaRepositoryTest {
         reserva.setStatus(STATUS.COMPLETED.ordinal());
         reserva.setDia(day2);
         reserva.setHora(LocalTime.of(11,00));
+
+        utilizador.setReservas(Arrays.asList(reserva));
 
         entityManager.persist(utilizador);
         entityManager.persistAndFlush(reserva);
@@ -59,5 +62,27 @@ class ReservaRepositoryTest {
         List<Reserva> bookings = repository.findByDia(day2);
 
         assertThat(bookings).hasSize(1);
+    }
+
+    @Test
+    void givenManyBookings_whenFindByUtilizador_thenReturnUtilizadorBookings(){
+        List<Reserva> bookings = repository.findByUtilizador(utilizador);
+
+        assertThat(bookings).hasSize(1);
+    }
+
+    @Test
+    void givenNoBookings_whenFindByUtilizador_thenReturnEmpty(){
+        Utilizador utilizador2 = new Utilizador();
+
+        utilizador2.setEmail("www@gmail.com");
+        utilizador2.setPassword("123123123");
+        utilizador2.setRole(ROLES.USER);
+
+        entityManager.persistAndFlush(utilizador2);
+
+        List<Reserva> bookings = repository.findByUtilizador(utilizador2);
+
+        assertThat(bookings).isEmpty();
     }
 }

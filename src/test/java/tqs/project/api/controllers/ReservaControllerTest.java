@@ -7,6 +7,8 @@ import static org.hamcrest.CoreMatchers.is;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +19,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
@@ -37,13 +44,19 @@ class ReservaControllerTest {
     MockMvc mvc;
 
     @MockBean
-    private ReservaService service;
+    ReservaService service;
 
     @MockBean
     JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @MockBean
     CustomUserDetailsService userService;
+
+    @MockBean
+    SecurityContext securityContext;
+
+    @MockBean
+    Authentication authentication;
 
     LocalDate day = LocalDate.parse("2024-01-01");
     Restaurant restaurant = new Restaurant();
@@ -63,8 +76,11 @@ class ReservaControllerTest {
 
         reserva.setUtilizador(utilizador);
 
+        List<Reserva> bookings = Arrays.asList(reserva);
+
         when(service.createBooking(Mockito.any())).thenReturn(reserva);
         when(service.getAvailableSlots(day)).thenReturn(restaurant.getDailySlots());
+        when(service.getUserBookings("user@gmail.com")).thenReturn(bookings);
     }
 
     @Test
@@ -123,5 +139,40 @@ class ReservaControllerTest {
             .statusCode(HttpStatus.SC_BAD_REQUEST);
 
         verify(service, times(1)).createBooking(Mockito.any());
+    }
+
+    @Test
+    @WithMockUser(username = "user@gmail.com")
+    void whenGetAuthenticatedUserBookings_thenReturnAuthenticatedUserBookings(){
+        // it feels like there's a better way of doing this, using a custom UserDetails or a mockuser interface
+        // however this seems to work for what we want so...
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        when(authentication.getName()).thenReturn("user@gmail.com");
+
+        RestAssuredMockMvc
+        .given()
+            .mockMvc(mvc)
+            .contentType(ContentType.JSON)
+        .when()
+            .get("/api/bookings")
+        .then()
+            .statusCode(HttpStatus.SC_OK)
+            .assertThat()
+            .body("utilizador.email[0]", is("user@gmail.com"));
+
+        verify(service, times(1)).getUserBookings(Mockito.any());
+    }
+
+    @Test
+    void whenGetUserBookingsWithoutAuthentication_thenReturnBadRequest(){
+        RestAssuredMockMvc
+        .given()
+            .mockMvc(mvc)
+            .contentType(ContentType.JSON)
+        .when()
+            .get("/api/bookings")
+        .then()
+            .statusCode(HttpStatus.SC_BAD_REQUEST);
     }
 }
