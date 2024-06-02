@@ -218,4 +218,55 @@ class ReservaControllerTest {
 
         verify(service, times(1)).getPendingBookings();
     }
+
+    @Test
+    @WithMockUser(roles = "WAITER")
+    void whenConfirmBooking_thenReturnUpdatedBooking(){
+        Reserva completedBooking = new Reserva();
+        completedBooking.setQuantidadeMesas(1);
+        completedBooking.setDia(LocalDate.now());
+        completedBooking.setHora(LocalTime.now());
+        completedBooking.setStatus(STATUS.COMPLETED.ordinal());
+
+        when(service.confirmBooking(Mockito.any())).thenReturn(completedBooking);
+
+        RestAssuredMockMvc
+        .given()
+            .mockMvc(mvc)
+            .contentType(ContentType.JSON)
+        .when()
+            .put("/api/bookings/confirm/1")
+        .then()
+            .statusCode(HttpStatus.SC_OK)
+            .assertThat()
+            .body("status", is(STATUS.COMPLETED.ordinal()));
+
+        verify(service, times(1)).confirmBooking(Mockito.any());
+    }
+
+
+    @Test
+    @WithMockUser(roles = "WAITER")
+    void whenCancelBooking_thenReturnUpdatedBooking(){
+        Reserva cancelledBooking = new Reserva();
+        cancelledBooking.setQuantidadeMesas(1);
+        cancelledBooking.setDia(LocalDate.now());
+        cancelledBooking.setHora(LocalTime.now());
+        cancelledBooking.setStatus(STATUS.CANCELLED.ordinal());
+
+        when(service.confirmBooking(Mockito.any())).thenReturn(cancelledBooking);
+
+        RestAssuredMockMvc
+        .given()
+            .mockMvc(mvc)
+            .contentType(ContentType.JSON)
+        .when()
+            .put("/api/bookings/confirm/1")
+        .then()
+            .statusCode(HttpStatus.SC_OK)
+            .assertThat()
+            .body("status", is(STATUS.CANCELLED.ordinal()));
+
+        verify(service, times(1)).confirmBooking(Mockito.any());
+    }
 }

@@ -164,4 +164,44 @@ class ReservaServiceTest {
         assertThat(bookings).hasSize(1);
         verify(reservaRepository, times(1)).findAllByStatus(STATUS.PENDING.ordinal());
     }
+
+    @Test
+    void givenBookingToUpdate_whenConfirmBooking_thenReturnUpdatedBooking() {
+        Reserva reservaToUpdate = new Reserva();
+        reservaToUpdate.setQuantidadeMesas(5);
+        reservaToUpdate.setStatus(STATUS.PENDING.ordinal());
+        reservaToUpdate.setDia(day);
+        reservaToUpdate.setHora(LocalTime.of(11,00));
+
+        when(reservaRepository.findById(1L)).thenReturn(Optional.of(reservaToUpdate));
+        when(reservaRepository.save(Mockito.any())).thenReturn(reserva);
+        
+        Reserva updatedReserva = service.confirmBooking(1L);
+
+        assertThat(updatedReserva.getStatus()).isEqualTo(STATUS.COMPLETED.ordinal());
+        verify(reservaRepository, times(1)).findById(1L);
+    }
+
+    @Test
+    void givenBookingToUpdate_whenCancelBooking_thenReturnUpdatedBooking() {
+        Reserva reservaToUpdate = new Reserva();
+        reservaToUpdate.setQuantidadeMesas(5);
+        reservaToUpdate.setStatus(STATUS.PENDING.ordinal());
+        reservaToUpdate.setDia(day);
+        reservaToUpdate.setHora(LocalTime.of(11,00));
+
+        Reserva reservaCancelled = new Reserva();
+        reservaCancelled.setQuantidadeMesas(5);
+        reservaCancelled.setStatus(STATUS.CANCELLED.ordinal());
+        reservaCancelled.setDia(day);
+        reservaCancelled.setHora(LocalTime.of(11,00));
+
+        when(reservaRepository.findById(1L)).thenReturn(Optional.of(reservaToUpdate));
+        when(reservaRepository.save(Mockito.any())).thenReturn(reservaCancelled);
+        
+        Reserva updatedReserva = service.cancelBooking(1L);
+
+        assertThat(updatedReserva.getStatus()).isEqualTo(STATUS.CANCELLED.ordinal());
+        verify(reservaRepository, times(1)).findById(1L);
+    }
 }
