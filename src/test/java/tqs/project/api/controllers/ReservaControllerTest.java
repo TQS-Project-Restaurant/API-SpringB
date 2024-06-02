@@ -254,19 +254,19 @@ class ReservaControllerTest {
         cancelledBooking.setHora(LocalTime.now());
         cancelledBooking.setStatus(STATUS.CANCELLED.ordinal());
 
-        when(service.confirmBooking(Mockito.any())).thenReturn(cancelledBooking);
+        when(service.cancelBooking(Mockito.any())).thenReturn(cancelledBooking);
 
         RestAssuredMockMvc
         .given()
             .mockMvc(mvc)
             .contentType(ContentType.JSON)
         .when()
-            .put("/api/bookings/confirm/1")
+            .put("/api/bookings/cancel/1")
         .then()
             .statusCode(HttpStatus.SC_OK)
             .assertThat()
             .body("status", is(STATUS.CANCELLED.ordinal()));
 
-        verify(service, times(1)).confirmBooking(Mockito.any());
+        verify(service, times(1)).cancelBooking(Mockito.any());
     }
 }
