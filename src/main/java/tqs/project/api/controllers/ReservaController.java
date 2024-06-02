@@ -74,7 +74,8 @@ public class ReservaController {
 
     @Operation(summary = "Get all bookings from specific user", description = "Returns booking list associated with user")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully retrieved")
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+        @ApiResponse(responseCode = "400", description = "Failed to get authenticated user")
     })
     @GetMapping
     public ResponseEntity<List<Reserva>> getUserBookings(){
