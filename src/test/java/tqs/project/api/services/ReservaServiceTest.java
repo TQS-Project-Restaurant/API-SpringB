@@ -46,22 +46,21 @@ class ReservaServiceTest {
     LocalDate day2 = LocalDate.parse("2024-01-02");
     Utilizador utilizador = new Utilizador();
     Utilizador utilizador2 = new Utilizador();
+    Reserva reserva = new Reserva();
 
     @BeforeEach
     void setUp(){
         List<Reserva> noBookings = new ArrayList<>();
         when(reservaRepository.findByDia(day)).thenReturn(noBookings);
 
-        utilizador.setEmail("nice-email@gmail.com");
+        utilizador.setEmail("user@gmail.com");
         utilizador.setPassword("123123123");
         utilizador.setRole(ROLES.USER);
-        utilizador.setReservas(null);
 
         utilizador2.setEmail("nolimits88@live.com.pt");
         utilizador2.setPassword("0987654321");
         utilizador2.setRole(ROLES.USER);
 
-        Reserva reserva = new Reserva();
         reserva.setUtilizador(utilizador);
         reserva.setQuantidadeMesas(10);
         reserva.setStatus(STATUS.COMPLETED.ordinal());
@@ -135,5 +134,19 @@ class ReservaServiceTest {
 
         assertThat(found).isNull();
         verify(reservaRepository, never()).save(Mockito.any());
+    }
+
+    @Test
+    void givenUtilizador_whenGetReserva_thenReturnList() {
+        List<Reserva> utilizadorReservas = Arrays.asList(reserva);
+
+        utilizador.setReservas(utilizadorReservas);
+        when(reservaRepository.findByUtilizador(utilizador)).thenReturn(utilizadorReservas);
+        when(utilizadorRepository.findByEmail(Mockito.any())).thenReturn(Optional.of(utilizador));
+
+        List<Reserva> bookings = service.getUserBookings("user@gmail.com");
+
+        assertThat(bookings).hasSize(1);
+        verify(reservaRepository, times(1)).findByUtilizador(Mockito.any());
     }
 }
