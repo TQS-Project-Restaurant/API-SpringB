@@ -86,6 +86,6 @@ public class ReservaServiceImpl implements ReservaService{
 
     @Override
     public List<Reserva> getUserBookings(String email) {
-        return reservaRepository.findByUtilizador(utilizadorRepository.findByEmail(email).get());
+        return reservaRepository.findByUtilizador(utilizadorRepository.findByEmail(email).orElse(null));
     }
 }
