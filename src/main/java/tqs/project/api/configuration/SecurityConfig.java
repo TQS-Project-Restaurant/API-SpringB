@@ -41,6 +41,8 @@ public class SecurityConfig {
                 .requestMatchers("api/requests/**").hasAnyRole(ROLES.KITCHEN.toString(),  ROLES.WAITER.toString())
                 .requestMatchers("api/bookings").hasAnyRole(ROLES.KITCHEN.toString(),  ROLES.WAITER.toString(), ROLES.USER.toString())
                 .requestMatchers("api/bookings/pending").hasRole(ROLES.WAITER.toString())
+                .requestMatchers("api/bookings/confirm/**").hasRole(ROLES.WAITER.toString())
+                .requestMatchers("api/bookings/cancel/**").hasRole(ROLES.WAITER.toString())
                 .anyRequest().permitAll()
             )
             .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
