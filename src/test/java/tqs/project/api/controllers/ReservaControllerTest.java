@@ -29,6 +29,7 @@ import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 
 import tqs.project.api.configuration.JwtAuthenticationFilter;
+import tqs.project.api.dao.ReservaRequest;
 import tqs.project.api.models.Reserva;
 import tqs.project.api.models.Utilizador;
 import tqs.project.api.others.ROLES;
@@ -78,9 +79,15 @@ class ReservaControllerTest {
 
         List<Reserva> bookings = Arrays.asList(reserva);
 
-        when(service.createBooking(Mockito.any())).thenReturn(reserva);
+        when(service.createBooking(Mockito.any(), Mockito.any())).thenReturn(reserva);
         when(service.getAvailableSlots(day)).thenReturn(restaurant.getDailySlots());
         when(service.getUserBookings("user@gmail.com")).thenReturn(bookings);
+
+        // it feels like there's a better way of doing this, using a custom UserDetails or a mockuser interface
+        // however this seems to work for what we want so...
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        when(authentication.getName()).thenReturn("user@gmail.com");
     }
 
     @Test
@@ -100,12 +107,18 @@ class ReservaControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "user@gmail.com")
     void whenCreateBooking_thenReturnCreatedBooking() {
+        ReservaRequest reservaRequest = new ReservaRequest();
+        reservaRequest.setQuantidadeMesas(1);
+        reservaRequest.setDia(LocalDate.now());
+        reservaRequest.setHora(LocalTime.now());
+
         RestAssuredMockMvc
             .given()
                 .mockMvc(mvc)
                 .contentType(ContentType.JSON)
-                .body(reserva)
+                .body(reservaRequest)
             .when()
                 .post("/api/bookings")
             .then()
@@ -114,42 +127,53 @@ class ReservaControllerTest {
                 .body("utilizador.email", is("user@gmail.com"))
                 .body("status", is(STATUS.PENDING.ordinal()));
 
-        verify(service, times(1)).createBooking(Mockito.any());
+        verify(service, times(1)).createBooking(Mockito.any(), Mockito.any());
+    }
+
+    @Test
+    void whenCreateBookingWithoutAuthentication_thenReturnBadRequest() {
+        when(securityContext.getAuthentication()).thenReturn(null);
+        ReservaRequest reservaRequest = new ReservaRequest();
+        reservaRequest.setQuantidadeMesas(1);
+        reservaRequest.setDia(LocalDate.now());
+        reservaRequest.setHora(LocalTime.now());
+
+        RestAssuredMockMvc
+            .given()
+                .mockMvc(mvc)
+                .contentType(ContentType.JSON)
+                .body(reservaRequest)
+            .when()
+                .post("/api/bookings")
+            .then()
+                .statusCode(HttpStatus.SC_BAD_REQUEST);
     }
 
     @Test
     void whenCreateInvalidBooking_thenReturnBadRequest() {
-        Reserva innerReserva = new Reserva();
-        innerReserva.setHora(LocalTime.now());
-        innerReserva.setDia(LocalDate.now());
-        innerReserva.setQuantidadeMesas(12);
-        innerReserva.setStatus(STATUS.PENDING.ordinal());
-        innerReserva.setUtilizador(utilizador);
+        ReservaRequest reservaRequest = new ReservaRequest();
+        reservaRequest.setQuantidadeMesas(12);
+        reservaRequest.setDia(LocalDate.now());
+        reservaRequest.setHora(LocalTime.now());
 
-        when(service.createBooking(Mockito.any())).thenReturn(null);
+        when(service.createBooking(Mockito.any(), Mockito.any())).thenReturn(null);
 
         RestAssuredMockMvc
         .given()
             .mockMvc(mvc)
             .contentType(ContentType.JSON)
-            .body(innerReserva)
+            .body(reservaRequest)
         .when()
             .post("/api/bookings")
         .then()
             .statusCode(HttpStatus.SC_BAD_REQUEST);
 
-        verify(service, times(1)).createBooking(Mockito.any());
+        verify(service, times(1)).createBooking(Mockito.any(), Mockito.any());
     }
 
     @Test
     @WithMockUser(username = "user@gmail.com")
     void whenGetAuthenticatedUserBookings_thenReturnAuthenticatedUserBookings(){
-        // it feels like there's a better way of doing this, using a custom UserDetails or a mockuser interface
-        // however this seems to work for what we want so...
-        when(securityContext.getAuthentication()).thenReturn(authentication);
-        SecurityContextHolder.setContext(securityContext);
-        when(authentication.getName()).thenReturn("user@gmail.com");
-
         RestAssuredMockMvc
         .given()
             .mockMvc(mvc)
@@ -166,6 +190,8 @@ class ReservaControllerTest {
 
     @Test
     void whenGetUserBookingsWithoutAuthentication_thenReturnBadRequest(){
+        when(securityContext.getAuthentication()).thenReturn(null);
+
         RestAssuredMockMvc
         .given()
             .mockMvc(mvc)

@@ -22,6 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import tqs.project.api.dao.ReservaRequest;
 import tqs.project.api.models.Reserva;
 import tqs.project.api.services.ReservaService;
 
@@ -62,8 +63,14 @@ public class ReservaController {
                     description = "Failed to create booking")
     })
     @PostMapping
-    public ResponseEntity<Reserva> createBooking(@RequestBody Reserva reserva){
-        Reserva booking = reservaService.createBooking(reserva);
+    public ResponseEntity<Reserva> createBooking(@RequestBody ReservaRequest reserva){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        
+        if (authentication == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        Reserva booking = reservaService.createBooking(reserva, authentication.getName());
 
         if (booking == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

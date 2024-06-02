@@ -7,9 +7,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import tqs.project.api.dao.ReservaRequest;
 import tqs.project.api.models.Reserva;
 import tqs.project.api.models.Utilizador;
 import tqs.project.api.others.Restaurant;
+import tqs.project.api.others.STATUS;
 import tqs.project.api.repositories.ReservaRepository;
 import tqs.project.api.repositories.UtilizadorRepository;
 import tqs.project.api.services.ReservaService;
@@ -55,7 +57,7 @@ public class ReservaServiceImpl implements ReservaService{
 
     
     @Override
-    public Reserva createBooking(Reserva reserva){
+    public Reserva createBooking(ReservaRequest reserva, String email){
         List<Reserva> bookings = reservaRepository.findByDiaAndHora(reserva.getDia(), reserva.getHora());
         int occupiedTables = 0;
 
@@ -68,16 +70,24 @@ public class ReservaServiceImpl implements ReservaService{
             return null;
         }
 
-        Reserva saved = reservaRepository.save(reserva);
+        // creating and saving reserva
+        Reserva bookingToSave = new Reserva();
+        bookingToSave.setDia(reserva.getDia());
+        bookingToSave.setHora(reserva.getHora());
+        bookingToSave.setQuantidadeMesas(reserva.getQuantidadeMesas());
+        bookingToSave.setStatus(STATUS.PENDING.ordinal());
+
+        Utilizador utilizador = utilizadorRepository.findByEmail(email).get();
+        bookingToSave.setUtilizador(utilizador);
+
+        Reserva saved = reservaRepository.save(bookingToSave);
 
         // add RESERVA to UTILIZADOR
-        Utilizador utilizador = utilizadorRepository.findById(reserva.getUtilizador().getId()).get();
-
         if (utilizador.getReservas() == null){
             utilizador.setReservas(new ArrayList<>());
         }
 
-        utilizador.getReservas().add(reserva);
+        utilizador.getReservas().add(saved);
         utilizadorRepository.save(utilizador);
 
         return saved;

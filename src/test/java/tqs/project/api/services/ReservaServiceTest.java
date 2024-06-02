@@ -29,6 +29,7 @@ import tqs.project.api.models.Utilizador;
 import tqs.project.api.repositories.ReservaRepository;
 import tqs.project.api.repositories.UtilizadorRepository;
 import tqs.project.api.services.impl.ReservaServiceImpl;
+import tqs.project.api.dao.ReservaRequest;
 
 @ExtendWith(MockitoExtension.class)
 class ReservaServiceTest {
@@ -102,15 +103,19 @@ class ReservaServiceTest {
         Reserva innerReserva = new Reserva();
         innerReserva.setHora(LocalTime.now());
         innerReserva.setDia(LocalDate.now());
-        innerReserva.setQuantidadeMesas(5);
+        innerReserva.setQuantidadeMesas(1);
         innerReserva.setStatus(STATUS.PENDING.ordinal());
         innerReserva.setUtilizador(utilizador);
 
+        ReservaRequest reservaRequest = new ReservaRequest();
+        reservaRequest.setQuantidadeMesas(1);
+        reservaRequest.setDia(LocalDate.now());
+        reservaRequest.setHora(LocalTime.now());
 
-        when(utilizadorRepository.findById(Mockito.any())).thenReturn(Optional.of(utilizador));
-        when(reservaRepository.save(innerReserva)).thenReturn(innerReserva);
+        when(utilizadorRepository.findByEmail(Mockito.any())).thenReturn(Optional.of(utilizador));
+        when(reservaRepository.save(Mockito.any())).thenReturn(innerReserva);
 
-        Reserva found = service.createBooking(innerReserva);
+        Reserva found = service.createBooking(reservaRequest, utilizador.getEmail());
 
         assertThat(utilizador.getReservas()).isNotNull();
         assertThat(found).isEqualTo(innerReserva);
@@ -119,18 +124,12 @@ class ReservaServiceTest {
 
     @Test
     void givenReservaWithTooManyPeople_whenCreateReserva_thenReturnNull(){
-        Reserva innerReserva = new Reserva();
-        innerReserva.setHora(LocalTime.now());
-        innerReserva.setDia(LocalDate.now());
-        innerReserva.setQuantidadeMesas(12);
-        innerReserva.setStatus(STATUS.PENDING.ordinal());
-        innerReserva.setUtilizador(utilizador);
+        ReservaRequest reservaRequest = new ReservaRequest();
+        reservaRequest.setQuantidadeMesas(12);
+        reservaRequest.setDia(LocalDate.now());
+        reservaRequest.setHora(LocalTime.now());
 
-
-        when(utilizadorRepository.findById(Mockito.any())).thenReturn(Optional.of(utilizador));
-        when(reservaRepository.save(innerReserva)).thenReturn(innerReserva);
-
-        Reserva found = service.createBooking(innerReserva);
+        Reserva found = service.createBooking(reservaRequest, utilizador.getEmail());
 
         assertThat(found).isNull();
         verify(reservaRepository, never()).save(Mockito.any());
