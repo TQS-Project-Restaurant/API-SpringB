@@ -131,6 +131,25 @@ class ReservaControllerTest {
     }
 
     @Test
+    void whenCreateBookingWithoutAuthentication_thenReturnBadRequest() {
+        when(securityContext.getAuthentication()).thenReturn(null);
+        ReservaRequest reservaRequest = new ReservaRequest();
+        reservaRequest.setQuantidadeMesas(1);
+        reservaRequest.setDia(LocalDate.now());
+        reservaRequest.setHora(LocalTime.now());
+
+        RestAssuredMockMvc
+            .given()
+                .mockMvc(mvc)
+                .contentType(ContentType.JSON)
+                .body(reservaRequest)
+            .when()
+                .post("/api/bookings")
+            .then()
+                .statusCode(HttpStatus.SC_BAD_REQUEST);
+    }
+
+    @Test
     void whenCreateInvalidBooking_thenReturnBadRequest() {
         ReservaRequest reservaRequest = new ReservaRequest();
         reservaRequest.setQuantidadeMesas(12);
