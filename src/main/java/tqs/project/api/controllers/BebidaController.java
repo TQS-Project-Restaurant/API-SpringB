@@ -13,7 +13,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import tqs.project.api.models.Bebida;
-import tqs.project.api.models.Prato;
 import tqs.project.api.services.BebidaService;
 
 @RestController
