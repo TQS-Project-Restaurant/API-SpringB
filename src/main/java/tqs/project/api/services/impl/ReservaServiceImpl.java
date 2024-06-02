@@ -48,6 +48,7 @@ public class ReservaServiceImpl implements ReservaService{
             if (usedTables == restaurant.getTotalTables()){
                 slotsToRemove.add(hour);
             }
+            usedTables = 0;
         }
 
         availableSlots.removeAll(slotsToRemove);
@@ -103,5 +104,32 @@ public class ReservaServiceImpl implements ReservaService{
     @Override
     public List<Reserva> getPendingBookings() {
         return reservaRepository.findAllByStatus(STATUS.PENDING.ordinal());
+    }
+
+    @Override
+    public Reserva confirmBooking(Long id) {
+        Reserva updatedReserva = reservaRepository.findById(id).orElse(null);
+
+        if (updatedReserva == null){
+            return null;
+        }
+
+        updatedReserva.setStatus(STATUS.COMPLETED.ordinal());
+
+        return reservaRepository.save(updatedReserva);
+    }
+
+
+    @Override
+    public Reserva cancelBooking(Long id) {
+        Reserva updatedReserva = reservaRepository.findById(id).orElse(null);
+
+        if (updatedReserva == null){
+            return null;
+        }
+
+        updatedReserva.setStatus(STATUS.CANCELLED.ordinal());
+
+        return reservaRepository.save(updatedReserva);
     }
 }

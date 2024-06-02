@@ -10,7 +10,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -100,7 +102,7 @@ public class ReservaController {
     @Operation(summary = "Get all pending bookings", description = "Returns list with all pending bookings")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
-        @ApiResponse(responseCode = "403", description = "No access has been granted to access this")
+        @ApiResponse(responseCode = "400", description = "Failed to get authenticated user")
     })
     @GetMapping("/pending")
     public ResponseEntity<List<Reserva>> getPendingBookings(){
@@ -113,5 +115,41 @@ public class ReservaController {
         List<Reserva> pendingBookings = reservaService.getPendingBookings();
 
         return new ResponseEntity<>(pendingBookings, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Confirm booking", description = "Returns updated booking")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+        @ApiResponse(responseCode = "400", description = "Failed to get authenticated user")
+    })
+    @PutMapping("/confirm/{id}")
+    public ResponseEntity<Reserva> confirmBooking(@PathVariable("id") Long id){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        
+        if (authentication == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        Reserva updatedBooking = reservaService.confirmBooking(id);
+
+        return new ResponseEntity<>(updatedBooking, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Cancel booking", description = "Returns updated booking")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+        @ApiResponse(responseCode = "400", description = "Failed to get authenticated user")
+    })
+    @PutMapping("/cancel/{id}")
+    public ResponseEntity<Reserva> cancelBooking(@PathVariable("id") Long id){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        
+        if (authentication == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        Reserva updatedBooking = reservaService.cancelBooking(id);
+
+        return new ResponseEntity<>(updatedBooking, HttpStatus.OK);
     }
 }

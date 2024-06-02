@@ -15,4 +15,8 @@ public interface ReservaService {
     List<Reserva> getUserBookings(String email);
 
     List<Reserva> getPendingBookings();
+
+    Reserva confirmBooking(Long id);
+
+    Reserva cancelBooking(Long id);
 }
