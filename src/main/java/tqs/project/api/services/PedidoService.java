@@ -2,14 +2,17 @@ package tqs.project.api.services;
 
 import java.util.List;
 
+import tqs.project.api.dao.PedidoRequest;
 import tqs.project.api.models.Pedido;
 
 public interface PedidoService {
-    public List<Pedido> getPendingPedidos();
+    List<Pedido> getPendingPedidos();
 
-    public List<Pedido> getPreparingPedidos();
+    List<Pedido> getPreparingPedidos();
 
-    public List<Pedido> getPedidos();
+    List<Pedido> getPedidos();
 
-    public Pedido updatePedido(Long id, Pedido pedido);
+    Pedido updatePedido(Long id, Pedido pedido);
+
+    List<Pedido> createPedidos(PedidoRequest pedidoRequest);
 }

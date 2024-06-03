@@ -17,6 +17,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,6 +25,8 @@ import org.apache.http.HttpStatus;
 
 import tqs.project.api.services.PedidoService;
 import tqs.project.api.configuration.JwtAuthenticationFilter;
+import tqs.project.api.dao.PedidoItem;
+import tqs.project.api.dao.PedidoRequest;
 import tqs.project.api.models.Pedido;
 import tqs.project.api.others.STATUS;
 
@@ -185,5 +188,59 @@ class PedidoControllerTest {
             .put("/api/requests/1")
         .then()
             .statusCode(HttpStatus.SC_NOT_FOUND);
+    }
+
+    @Test
+    void givenPedido_whenPostPedido_thenReturnListPedido(){
+        PedidoItem pedidoItem = new PedidoItem();
+        pedidoItem.setId(1L);
+        pedidoItem.setQuantidade(1);
+
+        PedidoItem pedidoItem2 = new PedidoItem();
+        pedidoItem2.setId(1L);
+        pedidoItem2.setQuantidade(1);
+
+        PedidoRequest pedidoRequest = new PedidoRequest();
+        pedidoRequest.setBebidas(Arrays.asList(pedidoItem));
+        pedidoRequest.setPratos(Arrays.asList(pedidoItem2));
+
+        List<Pedido> pedidos = new ArrayList<>();
+        pedidos.add(pedido);
+        pedidos.add(pedido2);
+
+        when(service.createPedidos(Mockito.any())).thenReturn(pedidos);
+
+        RestAssuredMockMvc
+        .given()
+            .mockMvc(mvc)
+            .contentType(ContentType.JSON)
+            .body(pedidoRequest)
+        .when()
+            .post("/api/requests")
+        .then()
+            .statusCode(HttpStatus.SC_CREATED)
+            .assertThat()
+            .body("size()", is(2));
+
+        verify(service, times(1)).createPedidos(Mockito.any());  
+    }
+
+    @Test
+    void givenInvalidPedido_whenPostPedido_thenReturnNull(){
+        PedidoRequest pedidoRequest = new PedidoRequest();
+
+        when(service.createPedidos(Mockito.any())).thenReturn(null);
+
+        RestAssuredMockMvc
+        .given()
+            .mockMvc(mvc)
+            .contentType(ContentType.JSON)
+            .body(pedidoRequest)
+        .when()
+            .post("/api/requests")
+        .then()
+            .statusCode(HttpStatus.SC_BAD_REQUEST);
+
+        verify(service, times(1)).createPedidos(Mockito.any());  
     }
 }
