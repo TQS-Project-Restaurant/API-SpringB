@@ -13,4 +13,6 @@ public class PedidoRequest {
     List<PedidoItem> bebidas;
     
     List<PedidoItem> pratos;
+
+    int mesa;
 }

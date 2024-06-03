@@ -72,23 +72,40 @@ public class PedidoServiceImpl implements PedidoService {
         List<Bebida> bebidas = new ArrayList<>();
         List<Prato> pratos = new ArrayList<>();
 
+        // iterate through every item
         for(int i = 0; i < itemNumber; i++){
             PedidoItem bebidaItem = pedidoRequest.getBebidas().get(i);
             PedidoItem pratoItem = pedidoRequest.getPratos().get(i);
 
             Bebida bebida = bebidaRepository.findById(bebidaItem.getId()).get();
+            Prato prato = pratoRepository.findById(pratoItem.getId()).get();
             
-            if(bebidaItem.getQuantidade() > bebida.getStock()){
+            // if requested stock is too high, then fail
+            if(bebidaItem.getQuantidade() > bebida.getStock() || pratoItem.getQuantidade() > prato.getStock()){
                 return null;
             }
 
-            Prato prato = new Prato();
+            bebida.setStock(bebida.getStock() - bebidaItem.getQuantidade());
+            prato.setStock(prato.getStock() - pratoItem.getQuantidade());
 
             bebidas.add(bebida);
             pratos.add(prato);
         }
 
-        return pedido;
+        // updating stock in database
+        for(int i = 0; i < itemNumber; i++){
+            bebidaRepository.save(bebidas.get(i));
+            pratoRepository.save(pratos.get(i));
+        }
+
+        // creating pedido
+        pedido.setBebidas(bebidas);
+        pedido.setPratos(pratos);
+        pedido.setMesa(pedidoRequest.getMesa());
+        pedido.setLastModified(System.currentTimeMillis() % 1000);
+        pedido.setStatus(STATUS.PENDING.ordinal());
+
+        return pedidoRepository.save(pedido);
     }
 
 }

@@ -17,7 +17,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -197,6 +196,7 @@ class PedidoControllerTest {
         PedidoRequest pedidoRequest = new PedidoRequest();
         pedidoRequest.setBebidas(Arrays.asList(new PedidoItem()));
         pedidoRequest.setPratos(Arrays.asList(new PedidoItem()));
+        pedidoRequest.setMesa(0);
 
         Pedido pedido = new Pedido();
         pedido.setBebidas(Arrays.asList(new Bebida()));
