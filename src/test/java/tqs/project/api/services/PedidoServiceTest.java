@@ -18,15 +18,27 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import tqs.project.api.repositories.BebidaRepository;
 import tqs.project.api.repositories.PedidoRepository;
+import tqs.project.api.repositories.PratoRepository;
 import tqs.project.api.services.impl.PedidoServiceImpl;
+import tqs.project.api.dao.PedidoItem;
+import tqs.project.api.dao.PedidoRequest;
+import tqs.project.api.models.Bebida;
 import tqs.project.api.models.Pedido;
+import tqs.project.api.models.Prato;
 import tqs.project.api.others.STATUS;
 
 @ExtendWith(MockitoExtension.class)
 class PedidoServiceTest {
     @Mock(strictness = Mock.Strictness.LENIENT )
     private PedidoRepository repository;
+
+    @Mock(strictness = Mock.Strictness.LENIENT )
+    private BebidaRepository bebidaRepository;
+
+    @Mock(strictness = Mock.Strictness.LENIENT )
+    private PratoRepository pratoRepository;
 
     @InjectMocks
     private PedidoServiceImpl service;
@@ -109,5 +121,63 @@ class PedidoServiceTest {
 
         assertThat(pedidoUpdated).isNull();
         verify(repository, times(1)).findById(2L);
+    }
+
+    @Test
+    void whenCreatePedido_thenReturnPedido(){
+        Prato prato = new Prato();
+        prato.setNome("francesinha");
+        prato.setPreco(2.0);
+        prato.setStock(10);
+
+        when(pratoRepository.findById(Mockito.any())).thenReturn(Optional.of(prato));
+
+        Bebida bebida = new Bebida();
+        bebida.setNome("coca-cola");
+        bebida.setPreco(2.0);
+        bebida.setStock(10);
+
+        when(bebidaRepository.findById(Mockito.any())).thenReturn(Optional.of(bebida));
+
+        PedidoItem pedidoBebidaItem = new PedidoItem();
+        pedidoBebidaItem.setQuantidade(3);
+
+        PedidoItem pedidoPratoItem = new PedidoItem();
+        pedidoPratoItem.setQuantidade(3);
+
+        PedidoRequest pedidoRequest = new PedidoRequest();
+        pedidoRequest.setBebidas(Arrays.asList(pedidoBebidaItem));
+        pedidoRequest.setPratos(Arrays.asList(pedidoPratoItem));
+        pedidoRequest.setMesa(1);
+
+        bebida.setStock(bebida.getStock() - pedidoBebidaItem.getQuantidade());
+        prato.setStock(prato.getStock() - pedidoPratoItem.getQuantidade());
+
+        List<Prato> listaPratos = Arrays.asList(prato);
+        List<Bebida> listaBebidas = Arrays.asList(bebida);
+
+        when(pratoRepository.saveAll(Mockito.any())).thenReturn(listaPratos);
+        when(bebidaRepository.saveAll(Mockito.any())).thenReturn(listaBebidas);
+
+        Pedido pedidoSaved = new Pedido();
+        pedidoSaved.setBebidas(listaBebidas);
+        pedidoSaved.setPratos(listaPratos);
+        pedidoSaved.setMesa(pedidoRequest.getMesa());
+        pedidoSaved.setStatus(STATUS.PENDING.ordinal());
+
+        when(repository.save(Mockito.any())).thenReturn(pedidoSaved);
+
+        Pedido pedido = service.createPedido(pedidoRequest);
+
+        assertThat(pedido.getBebidas()).contains(bebida);
+        assertThat(pedido.getPratos()).contains(prato);
+        assertThat(pedido.getMesa()).isEqualTo(pedidoRequest.getMesa());
+        assertThat(pedido.getStatus()).isEqualTo(STATUS.PENDING.ordinal());
+
+        verify(pratoRepository, times(1)).findById(pedidoPratoItem.getId());
+        verify(bebidaRepository, times(1)).findById(pedidoBebidaItem.getId());
+        verify(pratoRepository, times(1)).saveAll(Mockito.any());
+        verify(bebidaRepository, times(1)).saveAll(Mockito.any());
+        verify(repository, times(1)).save(Mockito.any());
     }
 }

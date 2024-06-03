@@ -31,7 +31,7 @@ public class Reserva {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "utilizador")
+    @JoinColumn(name = "utilizador_id")
     @Schema(description = "User associated with booking", requiredMode = RequiredMode.REQUIRED)
     private Utilizador utilizador;
 

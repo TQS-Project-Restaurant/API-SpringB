@@ -24,7 +24,11 @@ import org.apache.http.HttpStatus;
 
 import tqs.project.api.services.PedidoService;
 import tqs.project.api.configuration.JwtAuthenticationFilter;
+import tqs.project.api.dao.PedidoItem;
+import tqs.project.api.dao.PedidoRequest;
+import tqs.project.api.models.Bebida;
 import tqs.project.api.models.Pedido;
+import tqs.project.api.models.Prato;
 import tqs.project.api.others.STATUS;
 
 @WebMvcTest(PedidoController.class)
@@ -185,5 +189,53 @@ class PedidoControllerTest {
             .put("/api/requests/1")
         .then()
             .statusCode(HttpStatus.SC_NOT_FOUND);
+    }
+
+    @Test
+    void givenPedido_whenPostPedido_thenReturnListPedido(){
+        PedidoRequest pedidoRequest = new PedidoRequest();
+        pedidoRequest.setBebidas(Arrays.asList(new PedidoItem()));
+        pedidoRequest.setPratos(Arrays.asList(new PedidoItem()));
+        pedidoRequest.setMesa(0);
+
+        Pedido innerPedido = new Pedido();
+        innerPedido.setBebidas(Arrays.asList(new Bebida()));
+        innerPedido.setPratos(Arrays.asList(new Prato()));
+
+        when(service.createPedido(Mockito.any())).thenReturn(innerPedido);
+
+        RestAssuredMockMvc
+        .given()
+            .mockMvc(mvc)
+            .contentType(ContentType.JSON)
+            .body(pedidoRequest)
+        .when()
+            .post("/api/requests")
+        .then()
+            .statusCode(HttpStatus.SC_CREATED)
+            .assertThat()
+            .body("pratos.size()", is(1))
+            .body("bebidas.size()", is(1));
+
+        verify(service, times(1)).createPedido(Mockito.any());  
+    }
+
+    @Test
+    void givenInvalidPedido_whenPostPedido_thenReturnNull(){
+        PedidoRequest pedidoRequest = new PedidoRequest();
+
+        when(service.createPedido(Mockito.any())).thenReturn(null);
+
+        RestAssuredMockMvc
+        .given()
+            .mockMvc(mvc)
+            .contentType(ContentType.JSON)
+            .body(pedidoRequest)
+        .when()
+            .post("/api/requests")
+        .then()
+            .statusCode(HttpStatus.SC_BAD_REQUEST);
+
+        verify(service, times(1)).createPedido(Mockito.any());  
     }
 }

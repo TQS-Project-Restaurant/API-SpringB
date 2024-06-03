@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import tqs.project.api.dao.PedidoRequest;
 import tqs.project.api.models.Pedido;
 import tqs.project.api.others.STATUS;
 import tqs.project.api.services.PedidoService;
@@ -86,5 +88,23 @@ public class PedidoController {
         }
 
         return new ResponseEntity<>(updatedPedido, HttpStatus.OK);
+    }
+
+
+    @Operation(summary = "Create requests", description = "Creates requests based on a list provided by the waiter")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+        @ApiResponse(responseCode = "400", description = "Invalid status value received"),
+        @ApiResponse(responseCode = "404", description = "Given request was not found")
+    })
+    @PostMapping
+    public ResponseEntity<Pedido> createPedido(@RequestBody PedidoRequest pedidoRequest){
+        Pedido pedido = pedidoService.createPedido(pedidoRequest);
+
+        if (pedido == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(pedido, HttpStatus.CREATED);
     }
 }
