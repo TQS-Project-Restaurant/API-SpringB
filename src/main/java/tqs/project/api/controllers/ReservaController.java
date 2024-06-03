@@ -38,6 +38,7 @@ public class ReservaController {
 
     private final ReservaService reservaService;
     private static final Logger logger = LoggerFactory.getLogger(ReservaController.class);
+    private String FAILEDAUTHENTICATION = "Tried to verify authentication; However, it failed.";
 
     public ReservaController(ReservaService reservaService){
         this.reservaService = reservaService;
@@ -73,7 +74,7 @@ public class ReservaController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         
         if (authentication == null){
-            logger.warn("Tried to verify authentication; However, it failed.");
+            logger.warn(FAILEDAUTHENTICATION);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -98,7 +99,7 @@ public class ReservaController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         
         if (authentication == null){
-            logger.warn("Tried to verify authentication; However, it failed.");
+            logger.warn(FAILEDAUTHENTICATION);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -118,7 +119,7 @@ public class ReservaController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         
         if (authentication == null){
-            logger.warn("Tried to verify authentication; However, it failed.");
+            logger.warn(FAILEDAUTHENTICATION);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         
@@ -138,7 +139,7 @@ public class ReservaController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         
         if (authentication == null){
-            logger.warn("Tried to verify authentication; However, it failed.");
+            logger.warn(FAILEDAUTHENTICATION);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -158,7 +159,7 @@ public class ReservaController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         
         if (authentication == null){
-            logger.warn("Tried to verify authentication; However, it failed.");
+            logger.warn(FAILEDAUTHENTICATION);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
