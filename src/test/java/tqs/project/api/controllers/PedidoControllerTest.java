@@ -198,11 +198,11 @@ class PedidoControllerTest {
         pedidoRequest.setPratos(Arrays.asList(new PedidoItem()));
         pedidoRequest.setMesa(0);
 
-        Pedido pedido = new Pedido();
-        pedido.setBebidas(Arrays.asList(new Bebida()));
-        pedido.setPratos(Arrays.asList(new Prato()));
+        Pedido innerPedido = new Pedido();
+        innerPedido.setBebidas(Arrays.asList(new Bebida()));
+        innerPedido.setPratos(Arrays.asList(new Prato()));
 
-        when(service.createPedido(Mockito.any())).thenReturn(pedido);
+        when(service.createPedido(Mockito.any())).thenReturn(innerPedido);
 
         RestAssuredMockMvc
         .given()
