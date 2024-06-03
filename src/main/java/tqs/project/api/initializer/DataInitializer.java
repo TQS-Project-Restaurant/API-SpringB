@@ -278,7 +278,6 @@ public class DataInitializer implements CommandLineRunner {
         res.setUtilizador(UTILIZADORES[0]);
         reservaRepository.save(res);
 
-        UTILIZADORES[0].setReservas(Arrays.asList(res));
         utilizadorRepository.save(UTILIZADORES[0]);
 
         Reserva res2 = new Reserva();
@@ -289,7 +288,6 @@ public class DataInitializer implements CommandLineRunner {
         res2.setUtilizador(UTILIZADORES[3]);
         reservaRepository.save(res2);
 
-        UTILIZADORES[3].setReservas(Arrays.asList(res2));
         utilizadorRepository.save(UTILIZADORES[3]);
     }
 }
