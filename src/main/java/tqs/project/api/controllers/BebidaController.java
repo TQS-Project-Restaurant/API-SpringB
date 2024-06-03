@@ -15,6 +15,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import tqs.project.api.models.Bebida;
 import tqs.project.api.services.BebidaService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @Tag(name = "Beverage API")
 @RequestMapping("/api/beverages")
@@ -22,6 +25,7 @@ import tqs.project.api.services.BebidaService;
 public class BebidaController {
     
     private final BebidaService bebidaService;
+    private static final Logger logger = LoggerFactory.getLogger(BebidaController.class);
 
     public BebidaController(BebidaService bebidaService){
         this.bebidaService = bebidaService;
@@ -37,9 +41,11 @@ public class BebidaController {
         Bebida beverage = bebidaService.getBebida(id);
 
         if (beverage == null){
+            logger.warn("Tried to retrieve object BEBIDA with ID {}; However, it was not found.", id);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
+        logger.info("Retrieved object BEBIDA with ID {}", id);
         return new ResponseEntity<>(beverage, HttpStatus.OK);
     }
 }

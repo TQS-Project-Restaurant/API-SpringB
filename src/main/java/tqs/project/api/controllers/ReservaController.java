@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -35,6 +37,8 @@ import tqs.project.api.services.ReservaService;
 public class ReservaController {
 
     private final ReservaService reservaService;
+    private static final Logger logger = LoggerFactory.getLogger(ReservaController.class);
+    private String FAILEDAUTHENTICATION = "Tried to verify authentication; However, it failed.";
 
     public ReservaController(ReservaService reservaService){
         this.reservaService = reservaService;
@@ -53,6 +57,7 @@ public class ReservaController {
 
         List<LocalTime> availableSlots = reservaService.getAvailableSlots(bookingDate);
 
+        logger.info("Retrieved all AVAILABLE SLOTS");
         return new ResponseEntity<>(availableSlots, HttpStatus.OK);
     }
 
@@ -69,15 +74,18 @@ public class ReservaController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         
         if (authentication == null){
+            logger.warn(FAILEDAUTHENTICATION);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         Reserva booking = reservaService.createBooking(reserva, authentication.getName());
 
         if (booking == null){
+            logger.warn("Tried to create object RESERVA; However, it failed.");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+        logger.info("Created RESERVA.");
         return new ResponseEntity<>(booking, HttpStatus.CREATED);
     }
 
@@ -91,11 +99,13 @@ public class ReservaController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         
         if (authentication == null){
+            logger.warn(FAILEDAUTHENTICATION);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         List<Reserva> bookings = reservaService.getUserBookings(authentication.getName());
 
+        logger.info("Retrieved all UTILIZADOR RESERVAS");
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
 
@@ -109,11 +119,13 @@ public class ReservaController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         
         if (authentication == null){
+            logger.warn(FAILEDAUTHENTICATION);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         
         List<Reserva> pendingBookings = reservaService.getPendingBookings();
 
+        logger.info("Retrieved all PENDING RESERVAS");
         return new ResponseEntity<>(pendingBookings, HttpStatus.OK);
     }
 
@@ -127,11 +139,13 @@ public class ReservaController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         
         if (authentication == null){
+            logger.warn(FAILEDAUTHENTICATION);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         Reserva updatedBooking = reservaService.confirmBooking(id);
 
+        logger.info("Updated RESERVA to COMPLETED");
         return new ResponseEntity<>(updatedBooking, HttpStatus.OK);
     }
 
@@ -145,11 +159,13 @@ public class ReservaController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         
         if (authentication == null){
+            logger.warn(FAILEDAUTHENTICATION);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         Reserva updatedBooking = reservaService.cancelBooking(id);
 
+        logger.info("Updated RESERVA to CANCELLED");
         return new ResponseEntity<>(updatedBooking, HttpStatus.OK);
     }
 }
