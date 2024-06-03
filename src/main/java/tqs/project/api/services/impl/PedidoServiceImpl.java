@@ -93,10 +93,8 @@ public class PedidoServiceImpl implements PedidoService {
         }
 
         // updating stock in database
-        for(int i = 0; i < itemNumber; i++){
-            bebidaRepository.save(bebidas.get(i));
-            pratoRepository.save(pratos.get(i));
-        }
+        bebidaRepository.saveAll(bebidas);
+        pratoRepository.saveAll(pratos);
 
         // creating pedido
         pedido.setBebidas(bebidas);
