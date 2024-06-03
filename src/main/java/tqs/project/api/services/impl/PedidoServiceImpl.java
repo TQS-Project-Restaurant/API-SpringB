@@ -1,11 +1,16 @@
 package tqs.project.api.services.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import tqs.project.api.dao.PedidoItem;
+import tqs.project.api.dao.PedidoRequest;
+import tqs.project.api.models.Bebida;
 import tqs.project.api.models.Pedido;
+import tqs.project.api.models.Prato;
 import tqs.project.api.repositories.PedidoRepository;
 import tqs.project.api.services.PedidoService;
 
@@ -51,6 +56,27 @@ public class PedidoServiceImpl implements PedidoService {
         pedidoToUpdate.setLastModified(System.currentTimeMillis() % 1000);
 
         return pedidoRepository.save(pedidoToUpdate);
+    }
+
+    @Override
+    public List<Pedido> createPedidos(PedidoRequest pedidoRequest) {
+        int itemNumber = pedidoRequest.getPratos().size();
+        Pedido pedido = new Pedido();
+
+        List<Bebida> bebidas = new ArrayList<>();
+        List<Prato> pratos = new ArrayList<>();
+
+        for(int i = 0; i < itemNumber; i++){
+            PedidoItem bebidaItem = pedidoRequest.getBebidas().get(i);
+            PedidoItem pratoItem = pedidoRequest.getPratos().get(i);
+
+            Bebida bebida = new Bebida();
+
+
+            //bebidas.add()
+        }
+
+        return null;
     }
 
 }

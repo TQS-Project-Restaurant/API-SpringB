@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -278,14 +277,19 @@ public class DataInitializer implements CommandLineRunner {
         res.setStatus(0);
         res.setUtilizador(UTILIZADORES[0]);
         reservaRepository.save(res);
-    
+
+        UTILIZADORES[0].setReservas(Arrays.asList(res));
+        utilizadorRepository.save(UTILIZADORES[0]);
+
         Reserva res2 = new Reserva();
         res2.setDia(LocalDate.of(2024, 6, 20));
         res2.setHora(LocalTime.now());
         res2.setQuantidadeMesas(3);
         res2.setStatus(0);
         res2.setUtilizador(UTILIZADORES[3]);
-    
         reservaRepository.save(res2);
+
+        UTILIZADORES[3].setReservas(Arrays.asList(res2));
+        utilizadorRepository.save(UTILIZADORES[3]);
     }
 }
