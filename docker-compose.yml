@@ -1,0 +1,30 @@
+version: '3.9'
+services:
+
+  api:
+    container_name: api
+    depends_on:
+      - postgres
+    build:
+      context: ./
+      dockerfile: .docker/Dockerfile
+    volumes:
+     - ./:/app
+     - ./.m2:/root/.m2
+    working_dir: /app
+    command: sh run.sh
+    ports:
+      - 8080:8080
+      - 35729:35729
+      - 5005:5005
+    env_file:
+      - credentials.env
+
+  postgres:
+    container_name: restaurant-db
+    image: postgres:latest
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    env_file:
+      - credentials.env
