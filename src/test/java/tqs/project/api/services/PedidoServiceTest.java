@@ -153,12 +153,15 @@ class PedidoServiceTest {
         bebida.setStock(bebida.getStock() - pedidoBebidaItem.getQuantidade());
         prato.setStock(prato.getStock() - pedidoPratoItem.getQuantidade());
 
-        when(pratoRepository.save(Mockito.any())).thenReturn(prato);
-        when(bebidaRepository.save(Mockito.any())).thenReturn(bebida);
+        List<Prato> listaPratos = Arrays.asList(prato);
+        List<Bebida> listaBebidas = Arrays.asList(bebida);
+
+        when(pratoRepository.saveAll(Mockito.any())).thenReturn(listaPratos);
+        when(bebidaRepository.saveAll(Mockito.any())).thenReturn(listaBebidas);
 
         Pedido pedidoSaved = new Pedido();
-        pedidoSaved.setBebidas(Arrays.asList(bebida));
-        pedidoSaved.setPratos(Arrays.asList(prato));
+        pedidoSaved.setBebidas(listaBebidas);
+        pedidoSaved.setPratos(listaPratos);
         pedidoSaved.setMesa(pedidoRequest.getMesa());
         pedidoSaved.setStatus(STATUS.PENDING.ordinal());
 
@@ -173,8 +176,8 @@ class PedidoServiceTest {
 
         verify(pratoRepository, times(1)).findById(pedidoPratoItem.getId());
         verify(bebidaRepository, times(1)).findById(pedidoBebidaItem.getId());
-        verify(pratoRepository, times(1)).save(prato);
-        verify(bebidaRepository, times(1)).save(bebida);
+        verify(pratoRepository, times(1)).saveAll(Mockito.any());
+        verify(bebidaRepository, times(1)).saveAll(Mockito.any());
         verify(repository, times(1)).save(Mockito.any());
     }
 }
