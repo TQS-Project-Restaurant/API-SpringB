@@ -11,7 +11,9 @@ import tqs.project.api.dao.PedidoRequest;
 import tqs.project.api.models.Bebida;
 import tqs.project.api.models.Pedido;
 import tqs.project.api.models.Prato;
+import tqs.project.api.repositories.BebidaRepository;
 import tqs.project.api.repositories.PedidoRepository;
+import tqs.project.api.repositories.PratoRepository;
 import tqs.project.api.services.PedidoService;
 
 import tqs.project.api.others.STATUS;
@@ -20,10 +22,14 @@ import tqs.project.api.others.STATUS;
 public class PedidoServiceImpl implements PedidoService {
 
     private final PedidoRepository pedidoRepository;
+    private final BebidaRepository bebidaRepository;
+    private final PratoRepository pratoRepository;
 
     @Autowired
-    public PedidoServiceImpl(PedidoRepository pedidoRepository){
+    public PedidoServiceImpl(PedidoRepository pedidoRepository, BebidaRepository bebidaRepository, PratoRepository pratoRepository){
         this.pedidoRepository = pedidoRepository;
+        this.bebidaRepository = bebidaRepository;
+        this.pratoRepository = pratoRepository;
     }
 
     @Override
@@ -59,7 +65,7 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     @Override
-    public List<Pedido> createPedidos(PedidoRequest pedidoRequest) {
+    public Pedido createPedido(PedidoRequest pedidoRequest) {
         int itemNumber = pedidoRequest.getPratos().size();
         Pedido pedido = new Pedido();
 
@@ -70,13 +76,19 @@ public class PedidoServiceImpl implements PedidoService {
             PedidoItem bebidaItem = pedidoRequest.getBebidas().get(i);
             PedidoItem pratoItem = pedidoRequest.getPratos().get(i);
 
-            Bebida bebida = new Bebida();
+            Bebida bebida = bebidaRepository.findById(bebidaItem.getId()).get();
+            
+            if(bebidaItem.getQuantidade() > bebida.getStock()){
+                return null;
+            }
 
+            Prato prato = new Prato();
 
-            //bebidas.add()
+            bebidas.add(bebida);
+            pratos.add(prato);
         }
 
-        return null;
+        return pedido;
     }
 
 }

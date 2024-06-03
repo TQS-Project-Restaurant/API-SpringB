@@ -14,5 +14,5 @@ public interface PedidoService {
 
     Pedido updatePedido(Long id, Pedido pedido);
 
-    List<Pedido> createPedidos(PedidoRequest pedidoRequest);
+    Pedido createPedido(PedidoRequest pedidoRequest);
 }

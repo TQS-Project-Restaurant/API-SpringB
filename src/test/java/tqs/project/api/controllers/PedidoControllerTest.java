@@ -27,7 +27,9 @@ import tqs.project.api.services.PedidoService;
 import tqs.project.api.configuration.JwtAuthenticationFilter;
 import tqs.project.api.dao.PedidoItem;
 import tqs.project.api.dao.PedidoRequest;
+import tqs.project.api.models.Bebida;
 import tqs.project.api.models.Pedido;
+import tqs.project.api.models.Prato;
 import tqs.project.api.others.STATUS;
 
 @WebMvcTest(PedidoController.class)
@@ -192,23 +194,15 @@ class PedidoControllerTest {
 
     @Test
     void givenPedido_whenPostPedido_thenReturnListPedido(){
-        PedidoItem pedidoItem = new PedidoItem();
-        pedidoItem.setId(1L);
-        pedidoItem.setQuantidade(1);
-
-        PedidoItem pedidoItem2 = new PedidoItem();
-        pedidoItem2.setId(1L);
-        pedidoItem2.setQuantidade(1);
-
         PedidoRequest pedidoRequest = new PedidoRequest();
-        pedidoRequest.setBebidas(Arrays.asList(pedidoItem));
-        pedidoRequest.setPratos(Arrays.asList(pedidoItem2));
+        pedidoRequest.setBebidas(Arrays.asList(new PedidoItem()));
+        pedidoRequest.setPratos(Arrays.asList(new PedidoItem()));
 
-        List<Pedido> pedidos = new ArrayList<>();
-        pedidos.add(pedido);
-        pedidos.add(pedido2);
+        Pedido pedido = new Pedido();
+        pedido.setBebidas(Arrays.asList(new Bebida()));
+        pedido.setPratos(Arrays.asList(new Prato()));
 
-        when(service.createPedidos(Mockito.any())).thenReturn(pedidos);
+        when(service.createPedido(Mockito.any())).thenReturn(pedido);
 
         RestAssuredMockMvc
         .given()
@@ -220,16 +214,17 @@ class PedidoControllerTest {
         .then()
             .statusCode(HttpStatus.SC_CREATED)
             .assertThat()
-            .body("size()", is(2));
+            .body("pratos.size()", is(1))
+            .body("bebidas.size()", is(1));
 
-        verify(service, times(1)).createPedidos(Mockito.any());  
+        verify(service, times(1)).createPedido(Mockito.any());  
     }
 
     @Test
     void givenInvalidPedido_whenPostPedido_thenReturnNull(){
         PedidoRequest pedidoRequest = new PedidoRequest();
 
-        when(service.createPedidos(Mockito.any())).thenReturn(null);
+        when(service.createPedido(Mockito.any())).thenReturn(null);
 
         RestAssuredMockMvc
         .given()
@@ -241,6 +236,6 @@ class PedidoControllerTest {
         .then()
             .statusCode(HttpStatus.SC_BAD_REQUEST);
 
-        verify(service, times(1)).createPedidos(Mockito.any());  
+        verify(service, times(1)).createPedido(Mockito.any());  
     }
 }
