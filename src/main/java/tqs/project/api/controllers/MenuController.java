@@ -1,5 +1,7 @@
 package tqs.project.api.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,6 +23,7 @@ import tqs.project.api.services.MenuService;
 public class MenuController {
 
     private final MenuService menuService;
+    private static final Logger logger = LoggerFactory.getLogger(MenuController.class);
 
     public MenuController(MenuService menuService){
         this.menuService = menuService;
@@ -37,9 +40,11 @@ public class MenuController {
         Menu menu = menuService.getDailyMenu();
 
         if (menu == null){
+            logger.warn("Tried to retrieve object DAILY MENU; However, it was not found.");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
+        logger.info("Retrieved object DAILY MENU");
         return new ResponseEntity<>(menu, HttpStatus.OK);
     }
 }

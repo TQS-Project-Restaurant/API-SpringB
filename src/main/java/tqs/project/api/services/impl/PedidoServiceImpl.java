@@ -3,6 +3,8 @@ package tqs.project.api.services.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,8 @@ import tqs.project.api.others.STATUS;
 
 @Service
 public class PedidoServiceImpl implements PedidoService {
+
+    private static final Logger logger = LoggerFactory.getLogger(PedidoServiceImpl.class);
 
     private final PedidoRepository pedidoRepository;
     private final BebidaRepository bebidaRepository;
@@ -82,6 +86,7 @@ public class PedidoServiceImpl implements PedidoService {
             
             // if requested stock is too high, then fail
             if(bebidaItem.getQuantidade() > bebida.getStock() || pratoItem.getQuantidade() > prato.getStock()){
+                logger.warn("Tried to create a PEDIDO with ambitious quantity - Reason: NOT ENOUGH STOCK");
                 return null;
             }
 
