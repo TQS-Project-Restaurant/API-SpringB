@@ -98,13 +98,13 @@ public class PedidoController {
         @ApiResponse(responseCode = "404", description = "Given request was not found")
     })
     @PostMapping
-    public ResponseEntity<List<Pedido>> createPedido(@RequestBody PedidoRequest pedidoRequest){
-        List<Pedido> pedidos = pedidoService.createPedidos(pedidoRequest);
+    public ResponseEntity<Pedido> createPedido(@RequestBody PedidoRequest pedidoRequest){
+        Pedido pedido = pedidoService.createPedido(pedidoRequest);
 
-        if (pedidos == null){
+        if (pedido == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(pedidos, HttpStatus.CREATED);
+        return new ResponseEntity<>(pedido, HttpStatus.CREATED);
     }
 }
