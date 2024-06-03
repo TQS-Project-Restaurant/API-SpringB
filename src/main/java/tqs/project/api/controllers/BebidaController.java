@@ -41,11 +41,11 @@ public class BebidaController {
         Bebida beverage = bebidaService.getBebida(id);
 
         if (beverage == null){
-            logger.warn("Tried to retrieve object BEBIDA with ID " + id + "; However, it was not found.");
+            logger.warn("Tried to retrieve object BEBIDA with ID {}; However, it was not found.", id);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        logger.info("Retrieved object BEBIDA with ID " + id);
+        logger.info("Retrieved object BEBIDA with ID {}", id);
         return new ResponseEntity<>(beverage, HttpStatus.OK);
     }
 }

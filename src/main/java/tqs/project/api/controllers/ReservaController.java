@@ -56,7 +56,7 @@ public class ReservaController {
 
         List<LocalTime> availableSlots = reservaService.getAvailableSlots(bookingDate);
 
-        logger.info("Retrieved all AVAILABLE SLOTS for date " + date);
+        logger.info("Retrieved all AVAILABLE SLOTS");
         return new ResponseEntity<>(availableSlots, HttpStatus.OK);
     }
 
