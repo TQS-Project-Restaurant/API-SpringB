@@ -2,6 +2,8 @@ package tqs.project.api.controllers;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -29,6 +31,7 @@ import tqs.project.api.services.PedidoService;
 public class PedidoController {
 
     private final PedidoService pedidoService;
+    private static final Logger logger = LoggerFactory.getLogger(PedidoController.class);
 
     public PedidoController(PedidoService pedidoService){
         this.pedidoService = pedidoService;
@@ -42,6 +45,8 @@ public class PedidoController {
     @GetMapping
     public ResponseEntity<List<Pedido>> getAllPedidos(){
         List<Pedido> pedidos = pedidoService.getPedidos();
+
+        logger.info("Retrieved list of all PEDIDOS");
         return new ResponseEntity<>(pedidos, HttpStatus.OK);
     }
 
@@ -53,6 +58,8 @@ public class PedidoController {
     @GetMapping("/pending")
     public ResponseEntity<List<Pedido>> getAllPendingPedidos(){
         List<Pedido> pedidos = pedidoService.getPendingPedidos();
+
+        logger.info("Retrieved list of all PENDING PEDIDOS");
         return new ResponseEntity<>(pedidos, HttpStatus.OK);
     }
 
@@ -64,6 +71,8 @@ public class PedidoController {
     @GetMapping("/preparing")
     public ResponseEntity<List<Pedido>> getAllPreparingPedidos(){
         List<Pedido> pedidos = pedidoService.getPreparingPedidos();
+
+        logger.info("Retrieved list of all PREPARING PEDIDOS");
         return new ResponseEntity<>(pedidos, HttpStatus.OK);
     }
 
@@ -78,15 +87,18 @@ public class PedidoController {
     public ResponseEntity<Pedido> updatePedido(@PathVariable Long id, @RequestBody Pedido pedido){
         int status = pedido.getStatus();
         if (status > STATUS.CANCELLED.ordinal() || status < STATUS.PENDING.ordinal()){
+            logger.warn("Refused to update PEDIDO due to given STATUS being ILLEGAL;");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         
         Pedido updatedPedido = pedidoService.updatePedido(id, pedido);
 
         if(updatedPedido == null){
+            logger.warn("Tried to retrieve object PEDIDO; However, it was not found.");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
+        logger.info("Retrieved and Updated PEDIDO");
         return new ResponseEntity<>(updatedPedido, HttpStatus.OK);
     }
 
@@ -102,9 +114,11 @@ public class PedidoController {
         Pedido pedido = pedidoService.createPedido(pedidoRequest);
 
         if (pedido == null){
+            logger.warn("Tried to create object PEDIDO; However, it failed.");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+        logger.info("Created PEDIDO");
         return new ResponseEntity<>(pedido, HttpStatus.CREATED);
     }
 }

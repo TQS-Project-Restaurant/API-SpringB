@@ -5,6 +5,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import tqs.project.api.dao.ReservaRequest;
@@ -22,6 +24,7 @@ public class ReservaServiceImpl implements ReservaService{
     private final ReservaRepository reservaRepository;
     private final UtilizadorRepository utilizadorRepository;
     private final Restaurant restaurant = new Restaurant();
+    private static final Logger logger = LoggerFactory.getLogger(ReservaServiceImpl.class);
 
     public ReservaServiceImpl(ReservaRepository reservaRepository, UtilizadorRepository utilizadorRepository){
         this.reservaRepository = reservaRepository;
@@ -68,6 +71,7 @@ public class ReservaServiceImpl implements ReservaService{
 
         // Verify if there is space for customers
         if (occupiedTables + reserva.getQuantidadeMesas() > restaurant.getTotalTables()){
+            logger.warn("Tried to create a BOOKING with ambitious amount of people - Reason: NOT ENOUGH TABLES");
             return null;
         }
 
